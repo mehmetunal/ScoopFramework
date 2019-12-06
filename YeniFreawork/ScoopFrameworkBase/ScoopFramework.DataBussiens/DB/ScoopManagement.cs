@@ -13,6 +13,7 @@ namespace ScoopFramework.DataBussiens
         public ScoopManagement()
         {
             this.ConnectionString = WebConfigurationManager.AppSettings["DBConnection"];
+
             this.DbName = WebConfigurationManager.AppSettings["DBShema"];
         }
 
