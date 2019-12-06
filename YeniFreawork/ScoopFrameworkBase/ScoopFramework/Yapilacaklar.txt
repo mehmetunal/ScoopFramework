@@ -1,0 +1,5 @@
+﻿1-) tt den oluşan update insert global entity parametresi yapılacak
+2-) copy entity yapılacak
+3-) executereader
+4-) executenonquery
+5-) StoreProsedur

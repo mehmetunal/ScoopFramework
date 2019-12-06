@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KodTest", "KodTest\KodTest.csproj", "{CDD81B1B-47DA-4A49-AD76-7A70D672FE36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework", "ScoopFramework\ScoopFramework.csproj", "{FE5D808A-AF24-4D75-B0B2-7676EDCC75DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.Mvc", "ScoopFramework.Mvc\ScoopFramework.Mvc.csproj", "{B72FDC99-DB11-444E-8ED7-8A236B7F248E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.DataBussiens", "ScoopFramework.DataBussiens\ScoopFramework.DataBussiens.csproj", "{36FA5E23-0F6E-4DEB-8C57-DA100988267E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.MinifierLibrary", "MinifierLibrary\ScoopFramework.MinifierLibrary.csproj", "{32E2380F-F7E9-4320-B395-D13DB7C457AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.Files", "ScoopFramework.Files\ScoopFramework.Files.csproj", "{E3522EF0-D865-4B76-A5D6-A048E1E3A80A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CDD81B1B-47DA-4A49-AD76-7A70D672FE36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD81B1B-47DA-4A49-AD76-7A70D672FE36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD81B1B-47DA-4A49-AD76-7A70D672FE36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD81B1B-47DA-4A49-AD76-7A70D672FE36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE5D808A-AF24-4D75-B0B2-7676EDCC75DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE5D808A-AF24-4D75-B0B2-7676EDCC75DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE5D808A-AF24-4D75-B0B2-7676EDCC75DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE5D808A-AF24-4D75-B0B2-7676EDCC75DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B72FDC99-DB11-444E-8ED7-8A236B7F248E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B72FDC99-DB11-444E-8ED7-8A236B7F248E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B72FDC99-DB11-444E-8ED7-8A236B7F248E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B72FDC99-DB11-444E-8ED7-8A236B7F248E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36FA5E23-0F6E-4DEB-8C57-DA100988267E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36FA5E23-0F6E-4DEB-8C57-DA100988267E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36FA5E23-0F6E-4DEB-8C57-DA100988267E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36FA5E23-0F6E-4DEB-8C57-DA100988267E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32E2380F-F7E9-4320-B395-D13DB7C457AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32E2380F-F7E9-4320-B395-D13DB7C457AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32E2380F-F7E9-4320-B395-D13DB7C457AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32E2380F-F7E9-4320-B395-D13DB7C457AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3522EF0-D865-4B76-A5D6-A048E1E3A80A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3522EF0-D865-4B76-A5D6-A048E1E3A80A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3522EF0-D865-4B76-A5D6-A048E1E3A80A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3522EF0-D865-4B76-A5D6-A048E1E3A80A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F6C53AA7-A422-4864-90B0-68F1B0340FA6}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://yazilimci.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = MinifierLibrary\\ScoopFramework.MinifierLibrary.csproj
+		SccProjectName1 = MinifierLibrary
+		SccLocalPath1 = MinifierLibrary
+		SccProjectUniqueName2 = KodTest\\KodTest.csproj
+		SccProjectName2 = KodTest
+		SccLocalPath2 = KodTest
+		SccProjectUniqueName3 = ScoopFramework\\ScoopFramework.csproj
+		SccProjectName3 = ScoopFramework
+		SccLocalPath3 = ScoopFramework
+		SccProjectUniqueName4 = ScoopFramework.DataBussiens\\ScoopFramework.DataBussiens.csproj
+		SccProjectName4 = ScoopFramework.DataBussiens
+		SccLocalPath4 = ScoopFramework.DataBussiens
+		SccProjectUniqueName5 = ScoopFramework.Files\\ScoopFramework.Files.csproj
+		SccProjectName5 = ScoopFramework.Files
+		SccLocalPath5 = ScoopFramework.Files
+		SccProjectUniqueName6 = ScoopFramework.Mvc\\ScoopFramework.Mvc.csproj
+		SccProjectName6 = ScoopFramework.Mvc
+		SccLocalPath6 = ScoopFramework.Mvc
+	EndGlobalSection
+EndGlobal

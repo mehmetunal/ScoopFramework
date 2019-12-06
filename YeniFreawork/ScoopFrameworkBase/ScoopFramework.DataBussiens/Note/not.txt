@@ -1,0 +1,33 @@
+﻿@Html.Kendo().Upload().Name("EventFile").Multiple(false).HtmlAttributes(new Dictionary<string, object>()
+{
+    {"accept", "application/pdf, application/zip, .rar, image/*"}
+})
+
+
+<script type="text/javascript">
+    function GetCityId() {
+        return {
+            ID_1: $('#City').data('kendoDropDownList').dataItem().CityNumber
+        };
+    }
+</script>
+
+
+
+Microsoft.VisualStudio.TextTemplating.11.0
+Microsoft.VisualStudio.TextTemplating.Interfaces10.0
+Microsoft.VisualStudio.TextTemplating.Interfaces.11.0
+
+
+Engine engine = new Engine();
+
+//read the text template
+string input = File.ReadAllText(templateFileName);
+
+//transform the text template
+string output = engine.ProcessTemplate(input, host);
+
+
+/*****************************************************/
+Engine engine = new Engine();
+string result = engine.ProcessTemplate(File.ReadAllText("sample.tt"), host);

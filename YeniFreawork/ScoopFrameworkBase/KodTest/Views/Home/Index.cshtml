@@ -1,0 +1,67 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/jquery-1.7.min.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/ScoopFreanwork/js/extensions/ext.js"></script>
+</head>
+<body>
+
+
+
+    <form action="/Home/Upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="files" multiple />
+        <button type="submit">Sunucuya Gönder</button>
+
+    </form>
+
+
+    <div>
+        Tema Yok
+        <table id="example" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>UserEmail</th>
+                    <th>UserName</th>
+                    <th>id</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "ajax": {
+                    "type": "POST",
+                    "url": '/Home/DataSource',
+                    "contentType": 'application/json; charset=utf-8',
+                    "data": {
+                        "UserName": '@Json.Encode("mehmet")'
+                    }
+                },
+               
+                "serverSide": true,
+                "processing": true,
+                "paging": true,
+                "searching": { "regex": true },
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "pageLength": 10,
+                "columns": [
+                    { "data": "" },
+                    { "data": "UserEmail" },
+                    { "data": "UserName" },
+                    { "data": "id" }
+                ]
+            });
+        });
+    </script>
+</body>
+</html>

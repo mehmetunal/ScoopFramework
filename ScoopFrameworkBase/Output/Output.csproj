@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0194B61F-52C6-4BF0-A86D-33977A5539FD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Output</RootNamespace>
+    <AssemblyName>Output</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\ScoopFramework.Referance\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ScoopFramework.CacheManagement\ScoopFramework.CacheManagement.csproj">
+      <Project>{ffa65da8-33ae-4941-8fb6-c58cb563ff19}</Project>
+      <Name>ScoopFramework.CacheManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScoopFramework.DataModel\ScoopFramework.DataModel.csproj">
+      <Project>{6437635a-35ac-4a44-b47b-6d23c8c1f22f}</Project>
+      <Name>ScoopFramework.DataModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScoopFramework.FileStream\ScoopFramework.FileStream.csproj">
+      <Project>{c95d501c-d500-4f82-88cf-d33ce39b074e}</Project>
+      <Name>ScoopFramework.FileStream</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScoopFramework.JavaScriptLibrary\ScoopFramework.UI.Library.csproj">
+      <Project>{e7dc57e6-e7bd-47e0-9edc-9ef2fd19d713}</Project>
+      <Name>ScoopFramework.UI.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScoopFramework.JsonLibrary\ScoopFramework.JsonSerializeLibrary.csproj">
+      <Project>{7c2ec70b-7cf1-4fda-b56a-2486aaef8a25}</Project>
+      <Name>ScoopFramework.JsonSerializeLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScoopFramework\ScoopFramework.csproj">
+      <Project>{2173f366-2eb2-4f2a-b735-10fee407876d}</Project>
+      <Name>ScoopFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

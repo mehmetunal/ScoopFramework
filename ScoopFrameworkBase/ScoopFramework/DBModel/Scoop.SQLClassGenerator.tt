@@ -1,0 +1,131 @@
+﻿<#@ assembly name ="System.Data" #>
+<#@ assembly name ="System.Xml" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Data" #> 
+<#@ import namespace="System.Text" #> 
+<#+
+   public class SQLClassGenerator
+    {
+        Dictionary<Type, string> _alias = new Dictionary<Type, string>();
+        Dictionary<SqlDbType, Type> _types = new Dictionary<SqlDbType, Type>();
+        Dictionary<string, Type> _stypes = new Dictionary<string, Type>();
+
+        public SQLClassGenerator()
+        {
+            _alias[typeof(string)] = "string";
+            _alias[typeof(long)] = "long";
+            _alias[typeof(char)] = "char";
+            _alias[typeof(byte)] = "byte";
+            _alias[typeof(int)] = "int";
+            _alias[typeof(bool)] = "bool";
+            _alias[typeof(decimal)] = "decimal";
+            _alias[typeof(double)] = "double";
+            _alias[typeof(short)] = "short";
+            _alias[typeof(ushort)] = "ushort";
+            _alias[typeof(ulong)] = "ulong";
+            _alias[typeof(uint)] = "uint";
+            _alias[typeof(byte[])] = "byte []";
+
+            _types[SqlDbType.BigInt] = typeof(long);
+            _types[SqlDbType.Binary] = typeof(byte[]);
+            _types[SqlDbType.Bit] = typeof(bool);
+            _types[SqlDbType.Char] = typeof(string);
+            _types[SqlDbType.Date] = typeof(DateTime);
+            _types[SqlDbType.DateTime] = typeof(DateTime);
+            _types[SqlDbType.DateTime2] = typeof(DateTime);
+            _types[SqlDbType.DateTimeOffset] = typeof(DateTime);
+            _types[SqlDbType.Decimal] = typeof(decimal);
+            _types[SqlDbType.Float] = typeof(double);
+            _types[SqlDbType.Binary] = typeof(byte[]);
+            _types[SqlDbType.UniqueIdentifier] = typeof(Guid);
+            _types[SqlDbType.Int] = typeof(int);
+            _types[SqlDbType.Image] = typeof(byte[]);
+
+            _types[SqlDbType.Money] = typeof(decimal);
+            _types[SqlDbType.NChar] = typeof(string);
+            _types[SqlDbType.NText] = typeof(string);
+            _types[SqlDbType.NVarChar] = typeof(string);
+            _types[SqlDbType.Real] = typeof(float);
+            _types[SqlDbType.SmallDateTime] = typeof(DateTime);
+            _types[SqlDbType.SmallInt] = typeof(short);
+            _types[SqlDbType.TinyInt] = typeof(byte);
+            _types[SqlDbType.SmallMoney] = typeof(decimal);
+            _types[SqlDbType.Text] = typeof(string);
+            _types[SqlDbType.Time] = typeof(DateTime);
+            _types[SqlDbType.Timestamp] = typeof(byte[]);
+            _types[SqlDbType.VarBinary] = typeof(byte[]);
+
+
+            _types[SqlDbType.VarBinary] = typeof(byte[]);
+            _types[SqlDbType.VarChar] = typeof(string);
+            _types[SqlDbType.Variant] = typeof(object);
+            _types[SqlDbType.Xml] = typeof(string);
+            foreach (var k in _types)
+            {
+                _stypes[k.Key.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture)] = k.Value;
+            }
+
+        }
+
+        public string Generate(string strConn)
+        {
+
+
+            var con = new SqlConnection(strConn);
+            con.Open();
+            string[] objArrRestrict;
+            DataTable schemaTbl;
+            schemaTbl = con.GetSchema("Tables", null);
+            StringBuilder sb = new StringBuilder();
+            foreach (DataRow row in schemaTbl.Rows)
+            {
+                bool hasname = false;
+                var tablename = (string)row["TABLE_NAME"];
+
+                if (tablename == "Ugip_Goruntu" ||
+                      tablename == "PolygonCash" ||
+                      tablename == "Sayfa1$" ||
+                      tablename == "OlcumAylik" ||
+                      tablename == "_Account" ||
+                      tablename == "Foto" ||
+                      tablename == "HamVeri" ||
+                      tablename == "KadastralParsel"
+                    )
+                    continue;
+
+                objArrRestrict = new string[] { null, null, tablename, null };
+                var tbl = con.GetSchema("Columns", objArrRestrict);
+                foreach (DataRow colrow in tbl.Rows)
+                    hasname |= (string)colrow["column_name"] == "adi";
+                sb.AppendFormat("    public partial class {0}", tablename, hasname ? "NamedEntity" : "Entity");
+                sb.AppendLine();
+                sb.AppendLine("    {");
+                foreach (DataRow colrow in tbl.Rows)
+                {
+					var cname = (string)colrow["column_name"];
+						if ((string)colrow["data_type"] != "geography")
+						{
+							Type stype = _stypes[(string)colrow["data_type"]];
+							string alias = stype.Name;
+							if (!_alias.TryGetValue(stype, out alias))
+								alias = stype.Name;
+							alias += ((string)colrow["is_nullable"]) == "YES" && !stype.IsClass ? "" : "";
+							sb.AppendFormat("        public {0} {1} {{ get; set;}}", alias, cname);
+							sb.AppendLine();
+						}
+						else
+						{
+							sb.AppendFormat("        public {0} {1} {{ get; set;}}", "SqlGeography ", cname);
+							sb.AppendLine();
+                    
+						}
+                    
+                }
+                sb.AppendLine("    }");
+            }
+            return sb.ToString();
+        }
+
+    }
+#>

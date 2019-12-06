@@ -1,0 +1,133 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework", "ScoopFramework\ScoopFramework.csproj", "{2173F366-2EB2-4F2A-B735-10FEE407876D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.CacheManagement", "ScoopFramework.CacheManagement\ScoopFramework.CacheManagement.csproj", "{FFA65DA8-33AE-4941-8FB6-C58CB563FF19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.DataModel", "ScoopFramework.DataModel\ScoopFramework.DataModel.csproj", "{6437635A-35AC-4A44-B47B-6D23C8C1F22F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.UnitTestProject", "ScoopFramework.UnitTestProject\ScoopFramework.UnitTestProject.csproj", "{C033BA2D-1D56-4E51-BA58-202FD3108AC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.JsonSerializeLibrary", "ScoopFramework.JsonLibrary\ScoopFramework.JsonSerializeLibrary.csproj", "{7C2EC70B-7CF1-4FDA-B56A-2486AAEF8A25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Output", "Output\Output.csproj", "{0194B61F-52C6-4BF0-A86D-33977A5539FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.UI.Library", "ScoopFramework.JavaScriptLibrary\ScoopFramework.UI.Library.csproj", "{E7DC57E6-E7BD-47E0-9EDC-9EF2FD19D713}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.FileStream", "ScoopFramework.FileStream\ScoopFramework.FileStream.csproj", "{C95D501C-D500-4F82-88CF-D33CE39B074E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.DataModelAutomaticEntity", "ScoopFramework.DataModelAutomaticEntity\ScoopFramework.DataModelAutomaticEntity.csproj", "{B10A44EB-FCE9-4D7F-8AC9-850BDBD4228C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.Captcha", "ScoopFramework.Captcha\ScoopFramework.Captcha.csproj", "{831DDF60-0632-467F-8022-9E6335B359E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.TTGenerators", "ScoopFramework.TTGenerators\ScoopFramework.TTGenerators.csproj", "{37620E76-6D22-4F1A-A296-6A90DF34533B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoopFramework.GeometryMaps", "ScoopFramework.GeometryMaps\ScoopFramework.GeometryMaps.csproj", "{15627930-1E2A-42C4-AA15-83203D0C11FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2173F366-2EB2-4F2A-B735-10FEE407876D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2173F366-2EB2-4F2A-B735-10FEE407876D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2173F366-2EB2-4F2A-B735-10FEE407876D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2173F366-2EB2-4F2A-B735-10FEE407876D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFA65DA8-33AE-4941-8FB6-C58CB563FF19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFA65DA8-33AE-4941-8FB6-C58CB563FF19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFA65DA8-33AE-4941-8FB6-C58CB563FF19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFA65DA8-33AE-4941-8FB6-C58CB563FF19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6437635A-35AC-4A44-B47B-6D23C8C1F22F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6437635A-35AC-4A44-B47B-6D23C8C1F22F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6437635A-35AC-4A44-B47B-6D23C8C1F22F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6437635A-35AC-4A44-B47B-6D23C8C1F22F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C033BA2D-1D56-4E51-BA58-202FD3108AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C033BA2D-1D56-4E51-BA58-202FD3108AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C033BA2D-1D56-4E51-BA58-202FD3108AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C033BA2D-1D56-4E51-BA58-202FD3108AC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C2EC70B-7CF1-4FDA-B56A-2486AAEF8A25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C2EC70B-7CF1-4FDA-B56A-2486AAEF8A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C2EC70B-7CF1-4FDA-B56A-2486AAEF8A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C2EC70B-7CF1-4FDA-B56A-2486AAEF8A25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0194B61F-52C6-4BF0-A86D-33977A5539FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0194B61F-52C6-4BF0-A86D-33977A5539FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0194B61F-52C6-4BF0-A86D-33977A5539FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0194B61F-52C6-4BF0-A86D-33977A5539FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7DC57E6-E7BD-47E0-9EDC-9EF2FD19D713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7DC57E6-E7BD-47E0-9EDC-9EF2FD19D713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7DC57E6-E7BD-47E0-9EDC-9EF2FD19D713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7DC57E6-E7BD-47E0-9EDC-9EF2FD19D713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C95D501C-D500-4F82-88CF-D33CE39B074E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C95D501C-D500-4F82-88CF-D33CE39B074E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C95D501C-D500-4F82-88CF-D33CE39B074E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C95D501C-D500-4F82-88CF-D33CE39B074E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B10A44EB-FCE9-4D7F-8AC9-850BDBD4228C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B10A44EB-FCE9-4D7F-8AC9-850BDBD4228C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B10A44EB-FCE9-4D7F-8AC9-850BDBD4228C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B10A44EB-FCE9-4D7F-8AC9-850BDBD4228C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{831DDF60-0632-467F-8022-9E6335B359E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{831DDF60-0632-467F-8022-9E6335B359E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{831DDF60-0632-467F-8022-9E6335B359E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{831DDF60-0632-467F-8022-9E6335B359E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37620E76-6D22-4F1A-A296-6A90DF34533B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37620E76-6D22-4F1A-A296-6A90DF34533B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37620E76-6D22-4F1A-A296-6A90DF34533B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37620E76-6D22-4F1A-A296-6A90DF34533B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15627930-1E2A-42C4-AA15-83203D0C11FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15627930-1E2A-42C4-AA15-83203D0C11FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15627930-1E2A-42C4-AA15-83203D0C11FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15627930-1E2A-42C4-AA15-83203D0C11FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 13
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://yazilimci.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Output\\Output.csproj
+		SccProjectName1 = Output
+		SccLocalPath1 = Output
+		SccProjectUniqueName2 = ScoopFramework.CacheManagement\\ScoopFramework.CacheManagement.csproj
+		SccProjectName2 = ScoopFramework.CacheManagement
+		SccLocalPath2 = ScoopFramework.CacheManagement
+		SccProjectUniqueName3 = ScoopFramework.Captcha\\ScoopFramework.Captcha.csproj
+		SccProjectName3 = ScoopFramework.Captcha
+		SccLocalPath3 = ScoopFramework.Captcha
+		SccProjectUniqueName4 = ScoopFramework.DataModel\\ScoopFramework.DataModel.csproj
+		SccProjectName4 = ScoopFramework.DataModel
+		SccLocalPath4 = ScoopFramework.DataModel
+		SccProjectUniqueName5 = ScoopFramework.DataModelAutomaticEntity\\ScoopFramework.DataModelAutomaticEntity.csproj
+		SccProjectName5 = ScoopFramework.DataModelAutomaticEntity
+		SccLocalPath5 = ScoopFramework.DataModelAutomaticEntity
+		SccProjectUniqueName6 = ScoopFramework.FileStream\\ScoopFramework.FileStream.csproj
+		SccProjectName6 = ScoopFramework.FileStream
+		SccLocalPath6 = ScoopFramework.FileStream
+		SccProjectUniqueName7 = ScoopFramework.GeometryMaps\\ScoopFramework.GeometryMaps.csproj
+		SccProjectName7 = ScoopFramework.GeometryMaps
+		SccLocalPath7 = ScoopFramework.GeometryMaps
+		SccProjectUniqueName8 = ScoopFramework.JavaScriptLibrary\\ScoopFramework.UI.Library.csproj
+		SccProjectName8 = ScoopFramework.JavaScriptLibrary
+		SccLocalPath8 = ScoopFramework.JavaScriptLibrary
+		SccProjectUniqueName9 = ScoopFramework.JsonLibrary\\ScoopFramework.JsonSerializeLibrary.csproj
+		SccProjectName9 = ScoopFramework.JsonLibrary
+		SccLocalPath9 = ScoopFramework.JsonLibrary
+		SccProjectUniqueName10 = ScoopFramework.TTGenerators\\ScoopFramework.TTGenerators.csproj
+		SccProjectName10 = ScoopFramework.TTGenerators
+		SccLocalPath10 = ScoopFramework.TTGenerators
+		SccProjectUniqueName11 = ScoopFramework.UnitTestProject\\ScoopFramework.UnitTestProject.csproj
+		SccProjectName11 = ScoopFramework.UnitTestProject
+		SccLocalPath11 = ScoopFramework.UnitTestProject
+		SccProjectUniqueName12 = ScoopFramework\\ScoopFramework.csproj
+		SccProjectName12 = ScoopFramework
+		SccLocalPath12 = ScoopFramework
+	EndGlobalSection
+EndGlobal

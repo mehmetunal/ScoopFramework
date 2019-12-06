@@ -1,0 +1,560 @@
+﻿<#@ template language="C#" hostspecific="true" debug="True" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="Microsoft.VisualStudio.Shell.Interop" #>
+<#@ assembly name="EnvDTE" #>
+<#@ assembly name="EnvDTE80" #>
+<#@ assembly name="VSLangProj" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="Microsoft.SqlServer.Smo" #>
+<#@ assembly name="Microsoft.SqlServer.ConnectionInfo" #>
+<#@ assembly name="Microsoft.SqlServer.Management.Sdk.Sfc" #>
+<#@ assembly name="Microsoft.Build" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="Microsoft.SqlServer.Management.Smo" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="Microsoft.VisualStudio.Shell.Interop" #>
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="EnvDTE80" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+<#
+    //**********************************************************************************************
+    // This T4 generates POCOs from the specified DB and saves them to the specified folder which 
+    // is relative to the template's location. One file per table/POCO.
+    //**********************************************************************************************
+ 
+    //****************************
+    // DEFINE YOUR VARIABLES HERE
+    //****************************
+    // The SQL server name or IP
+    string sqlServer = ".";
+    // The SQL username
+    string sqlLogin = "sa";
+    // The SQL password
+    string sqlPassword = "77117722!";
+    // The SQL database to generate the POCOs for
+    string sqlDatabase = "ScoopFramework";
+    // The namespace to apply to the generated classes
+    string classNamespace = "ScoopFramework.DataBussiens";
+    // The destination folder for the generated classes, relative to this file's location.
+    string destinationFolder = "../DB/BaseMethod";
+  
+
+    // Loop over each table and create a class file!
+    Server server = new Server(sqlServer);
+    server.ConnectionContext.LoginSecure = false;
+    server.ConnectionContext.Login = sqlLogin;
+    server.ConnectionContext.Password = sqlPassword;
+    server.ConnectionContext.Connect();
+ 
+    foreach (Table table in server.Databases[sqlDatabase].Tables)
+    {
+        // Skip sys tables
+        if (table.Name.StartsWith("sys"))
+        {
+            continue;
+        }
+	#>using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
+using System.Linq.Expressions;
+using ScoopFramework.DataTables;
+using ScoopFramework.Model;
+using ScoopFramework.SqlOperactions;
+
+namespace ScoopFramework.DataBussiens
+{
+    /// <summary>
+    /// Represents a <#= table.Name #>.
+    /// NOTE: This class is generated from a T4 template - you should not modify it manually.
+    /// </summary>
+    partial class ScoopManagement
+    {
+        /// <summary>
+        ///  <#= table.Name #> Tablodan Tüm Dataları çeker  (gridin IDataTablesRequest gönderildiğinde şartlı veri çeker)
+        /// </summary>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
+        public List<<#= table.Name #>> GET<#= table.Name #>(IDataTablesRequest requestModel = null, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().OrderBy(x => x.created).DataTablesFiltre(requestModel).RunToList();
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> Tablodan Şarta göre veri çeker ve parametre olarak Linq Where Expression alır
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
+        public List<<#= table.Name #>> GET<#= table.Name #>ByWhere(Expression<Func<<#= table.Name #>, bool>> @where, IDataTablesRequest requestModel = null, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().Where(where).OrderBy(x => x.created).DataTablesFiltre(requestModel).RunToList();
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> Tablosundaki verilerin sayısını verir
+        /// </summary>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
+        public int GET<#= table.Name #>Count(IDataTablesRequest requestModel = null, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().DataTablesFiltre(requestModel).Count().RunCount();
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> Tablodan Şarta göre veri çeker ve parametre olarak Linq Where Expression alır
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
+        public int GET<#= table.Name #>Count(Expression<Func<<#= table.Name #>, bool>> @where, IDataTablesRequest requestModel = null, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().DataTablesFiltre(requestModel).Where(@where).Count().RunCount();
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> Tablodan Şarta göre veri çeker ve parametre olarak Linq Where Expression alır
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public <#= table.Name #> GET<#= table.Name #>ById(Guid id, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().Where(x => x.id == id).RunFirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> Tablodan  Şarta Göre En Son Eklenen Veriyi Çeker
+        /// </summary>
+        /// <param name="solid"></param>
+        /// <returns></returns>
+        public <#= table.Name #> GET<#= table.Name #>ByLastData(Expression<Func<<#= table.Name #>, object>> solid, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().OrderByDesc(solid).RunFirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> Tablosundan  Verileri Küçükten büyüğe doğru sırları parametre olarak linq order by Expression alır
+        /// </summary>
+        /// <param name="solid"></param>
+        /// <returns></returns>
+        public List<<#= table.Name #>> GET<#= table.Name #>ByOrderByDesc(Expression<Func<<#= table.Name #>, object>> solid, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().OrderByDesc(solid).RunToList();
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> Tablosundan Verileri büyükten küçüğe doğru sırları parametre olarak linq order by Expression alır
+        /// </summary>
+        /// <param name="solid"></param>
+        /// <returns></returns>
+        public List<<#= table.Name #>> GET<#= table.Name #>ByOrderBy(Expression<Func<<#= table.Name #>, object>> solid, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().OrderBy(solid).RunToList();
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> tabloya kayıt atar
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public ReturnValue Insert<#= table.Name #>(<#= table.Name #> entity, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().Insert(entity);
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> tabloya birden fazla kayıt atar
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public ReturnValue BulkInsert<#= table.Name #>(List<<#= table.Name #>> entity, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().BulkInsert(entity);
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> primary key göre güncelleme işlemi yapar
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public ReturnValue Update<#= table.Name #>(<#= table.Name #> entity, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().Update(entity);
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> tabloya update yapar bizim belirlediğimiz şarta göre
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public ReturnValue Update<#= table.Name #>(<#= table.Name #> entity, Expression<Func<<#= table.Name #>, object>> @where, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().Update(entity, @where);
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> birden fazla update yapar
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public ReturnValue BulkUpdate<#= table.Name #>(List<<#= table.Name #>> entity, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().BulkUpdate(entity);
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> birden fazla kayıt atar şarta göre 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public ReturnValue BulkUpdate<#= table.Name #>(List<<#= table.Name #>> entity, Expression<Func<<#= table.Name #>, object>> @where, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().BulkUpdate(entity, @where);
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> tabloya daki kayıtı siler primary key'e göre
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public ReturnValue Delete<#= table.Name #>(<#= table.Name #> entity, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().Delete(entity);
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> tabloya daki kayıt siler şarta göre
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public ReturnValue Delete<#= table.Name #>(<#= table.Name #> entity, Expression<Func<<#= table.Name #>, object>> @where, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().Delete(entity, @where);
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> tabloya daki kayıtları siler primary keye göre
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public ReturnValue BulkDelete<#= table.Name #>(List<<#= table.Name #>> entity, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().BulkDelete(entity);
+            }
+        }
+
+        /// <summary>
+        /// <#= table.Name #> tabloya daki kayıtları siler şarta göre
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public ReturnValue BulkDelete<#= table.Name #>(List<<#= table.Name #>> entity, Expression<Func<<#= table.Name #>, object>> @where, DbTransaction tran = null)
+        {
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().BulkDelete(entity, @where);
+            }
+        }
+    }
+}  
+<#
+	// Write new POCO class to its own file
+	SaveOutput("Proses_"+table.Name + ".cs", destinationFolder,classNamespace);
+} 
+#>
+
+
+<# 
+ foreach (View table in server.Databases[sqlDatabase].Views)
+    {
+        // Skip sys tables
+        if (!table.Name.StartsWith("VW"))
+        {
+            continue;
+        }
+	#>using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
+using System.Linq.Expressions;
+using ScoopFramework.DataTables;
+using ScoopFramework.Model;
+using ScoopFramework.SqlOperactions;
+namespace <#= classNamespace #>
+{
+	/// <summary>
+	/// Represents a <#= table.Name #>.
+	/// NOTE: This class is generated from a T4 template - you should not modify it manually.
+	/// </summary>
+	partial class ScoopManagement
+		{
+		/// <summary>
+        ///  <#= table.Name #> Tablodan  Tüm Dataları çeker  (gridin IDataTablesRequest gönderildiğinde şartlı veri çeker)
+        /// </summary>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
+		public List<<#= table.Name #>> GET<#= table.Name #>(IDataTablesRequest requestModel = null, DbTransaction tran = null)
+		{
+			using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().OrderBy(x => x.created).DataTablesFiltre(requestModel).RunToList();
+            }
+		}
+		
+		/// <summary>
+        /// <#= table.Name #> Tablodan Şarta göre veri çeker ve parametre olarak Linq Where Expression alır
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
+		public List<<#= table.Name #>> GET<#= table.Name #>ByWhere(Expression<Func<<#= table.Name #> , bool>> @where,IDataTablesRequest requestModel = null, DbTransaction tran = null)
+		{
+			using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().Where(where).OrderBy(x => x.created).DataTablesFiltre(requestModel).RunToList();
+            }
+		}
+
+		/// <summary>
+        ///  <#= table.Name #> Tablosundaki  kayıtların sayısı
+        /// </summary>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
+		public int GET<#= table.Name #>Count(IDataTablesRequest requestModel = null, DbTransaction tran = null)
+		{
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().DataTablesFiltre(requestModel).Count().RunCount();
+            }
+		}
+
+		/// <summary>
+        /// <#= table.Name #> Tablosundaki kayıtların sayısı (şarta göre)
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
+		public int GET<#= table.Name #>Count(Expression<Func<<#= table.Name #> , bool>> @where,IDataTablesRequest requestModel = null, DbTransaction tran = null)
+		{
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().DataTablesFiltre(requestModel).Where(@where).Count().RunCount();
+            }
+		}
+
+		/// <summary>
+        /// <#= table.Name #> tablosundan Id göre veri çeker
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+		public <#= table.Name #> GET<#= table.Name #>ById(Guid id, DbTransaction tran = null)
+		{
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().Where(x => x.id == id).RunFirstOrDefault();
+            }
+		}
+		
+		/// <summary>
+        /// <#= table.Name #> Tablosundan Şarta Göre En Son Eklenen Veriyi Çeker
+        /// </summary>
+        /// <param name="solid"></param>
+        /// <returns></returns>
+		public <#= table.Name #> GET<#= table.Name #>ByLastData(Expression<Func<<#= table.Name #>, object>> solid, DbTransaction tran = null)
+		{
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().OrderByDesc(solid).RunFirstOrDefault();
+            }
+		}
+
+		/// <summary>
+        /// <#= table.Name #> Tablosundan küçükten büyüğe göre veri çeker 
+        /// </summary>
+        /// <param name="solid"></param>
+        /// <returns></returns>
+		public List<<#= table.Name #>> GET<#= table.Name #>ByOrderByDesc(Expression<Func<<#= table.Name #>, object>> solid, DbTransaction tran = null)
+		{
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().OrderByDesc(solid).RunToList();
+            }
+		}
+
+		/// <summary>
+        /// <#= table.Name #> Tablosundan büyükten küçükğe göre veri çeker 
+        /// </summary>
+        /// <param name="solid"></param>
+        /// <returns></returns>
+		public List<<#= table.Name #>> GET<#= table.Name #>ByOrderBy(Expression<Func<<#= table.Name #>, object>> solid, DbTransaction tran = null)
+		{
+            using (var db = GetDB<<#= table.Name #>>(tran))
+            {
+                return db.Table().OrderBy(solid).RunToList();
+            }
+		}
+	}
+}      
+<#
+	// Write new POCO class to its own file
+	SaveOutput("Proses_"+table.Name + ".cs", destinationFolder,classNamespace);
+} 
+#>
+
+
+<#+    
+
+void SaveOutput(string outputFileName, string destinationFolder,string classNamespace)
+    {
+		// Write to destination folder
+        string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), destinationFolder);
+        string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+        File.Delete(outputFilePath);
+        File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString(),Encoding.UTF8); 
+ 
+        // Flush generation
+        this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+
+
+		var serviceProvider = this.Host as IServiceProvider;
+		var dte = serviceProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+		var solutionDirectory = System.IO.Path.GetDirectoryName(dte.Solution.FullName);
+
+		var project = GetProjectByName(dte, classNamespace);
+
+		//StringBuilder template = GenerationEnvironment;
+		//template.Append(Path.GetFullPath(outputFilePath));
+
+		AddFolderByPath(project, Path.GetFullPath(outputFilePath));
+
+    }
+EnvDTE.Project GetProjectByName(EnvDTE.DTE dte, String name)
+	{
+		EnvDTE.Projects projects = dte.Solution.Projects;
+		foreach(EnvDTE.Project projectItem in projects)
+		{
+			//_template.AppendLine(projectItem.Name);
+			if (projectItem.Name == name)
+				return projectItem;
+		}
+		return null;
+	}
+	EnvDTE.ProjectItem GetFolderByPath(EnvDTE.Project project, string path)
+	{	
+		string projectPath = Path.GetFullPath(Path.GetDirectoryName(project.FullName));
+		
+		//path = Path.GetFullPath(path);
+		
+		path = path.Replace(projectPath, "");
+		string[] folders = path.Split(new char[]{ '\\' }, StringSplitOptions.RemoveEmptyEntries);
+		
+		
+
+		EnvDTE.ProjectItems projItems = project.ProjectItems;
+		EnvDTE.ProjectItem projItem = null;
+		for(int i = 0; i < folders.Length; i++){
+			foreach(EnvDTE.ProjectItem projectItem in projItems) {
+				if(projectItem.Name == folders[i])
+				{
+					projItems = projectItem.ProjectItems;
+					if (i == folders.Length - 1) projItem = projectItem;
+					break;
+				}
+			}
+		}
+		return projItem;
+	}
+	void AddFolderByPath(EnvDTE.Project project, string path)
+	{
+		string projectPath = Path.GetDirectoryName(project.FullName);
+		path = path.Replace(projectPath, "");
+		string fullPath = Path.Combine(projectPath, path);
+		var item = GetFolderByPath(project, fullPath);
+		if(item != null)
+			return;
+		
+		Directory.CreateDirectory(fullPath);
+		String[] folders = path.Split(new char[]{ '\\' }, StringSplitOptions.RemoveEmptyEntries);
+		
+		EnvDTE.ProjectItems projItems = project.ProjectItems;
+		EnvDTE.ProjectItem projItem = null;
+		String tempPath = projectPath;
+		for(int i = 0; i < folders.Length; i++){
+			bool folderExists = false;
+			tempPath = Path.Combine(tempPath, folders[i]);
+			foreach(EnvDTE.ProjectItem projectItem in projItems) {
+				if(projectItem.Name == folders[i])
+				{
+					projItems = projectItem.ProjectItems;
+					if (i == folders.Length - 1) projItem = projectItem;
+					folderExists = true;
+					break;
+				}
+			}
+			if (!folderExists) {
+				projItems.AddFromDirectory(tempPath);
+				return;
+			}
+		}
+		return;
+	}
+#>

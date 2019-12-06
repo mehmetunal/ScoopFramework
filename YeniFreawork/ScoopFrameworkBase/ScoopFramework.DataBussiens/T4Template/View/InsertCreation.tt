@@ -1,0 +1,292 @@
+﻿<#@ template language="C#" hostspecific="true" debug="True" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="Microsoft.SqlServer.Smo" #>
+<#@ assembly name="Microsoft.SqlServer.ConnectionInfo" #>
+<#@ assembly name="Microsoft.SqlServer.Management.Sdk.Sfc" #>
+<#@ assembly name="Microsoft.Build" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="Microsoft.SqlServer.Management.Smo" #>
+<#
+    //**********************************************************************************************
+    // This T4 generates POCOs from the specified DB and saves them to the specified folder which 
+    // is relative to the template's location. One file per table/POCO.
+    //**********************************************************************************************
+ 
+    //****************************
+    // DEFINE YOUR VARIABLES HERE
+    //****************************
+    // The SQL server name or IP
+    string sqlServer = ".";
+    // The SQL username
+    string sqlLogin = "sa";
+    // The SQL password
+    string sqlPassword = "sql_1453";
+    // The SQL database to generate the POCOs for
+    string sqlDatabase = "SporOtomasyon";
+    // The destination folder for the generated classes, relative to this file's location.
+    string destinationFolder = "../../Web/Views";
+ 
+    // Loop over each table and create a class file!
+    Server server = new Server(sqlServer);
+    server.ConnectionContext.LoginSecure = false;
+    server.ConnectionContext.Login = sqlLogin;
+    server.ConnectionContext.Password = sqlPassword;
+    server.ConnectionContext.Connect();
+ 
+    foreach (Table table in server.Databases[sqlDatabase].Tables)
+    {
+        // Skip sys tables
+        if (table.Name.StartsWith("sys"))
+        {
+            continue;
+        }
+		 // Keep count so we don't whitespace the last property/column
+			int columnCount = table.Columns.Count;
+			int i = 0;
+		#>
+@model <#= table.Name #>
+@{
+ViewBag.Title = "Yeni Kayıt";
+Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section SiteMap{
+	<div class="container-fluid container-fixed-lg">
+		<ul class="breadcrumb">
+			<li>
+				<p>Yönet</p>
+			</li>
+			<li>
+				<a href="@Url.Action("Index", "<#= table.Name #>", new {area = "Admin"})" class="active">İçerikler</a>
+			</li>
+			<li>
+				<a href="@Url.Action("Insert", "<#= table.Name #>", new {area = "Admin"})" class="active">@ViewBag.Title</a>
+			</li>
+		</ul>
+	</div>
+}
+
+
+
+<form class="form-horizontal" action="@Url.Action("Insert","<#= table.Name #>",new {area="Admin"})"  role="form" data-formType="Ajax" data-selector="modalContainer" novalidate enctype="multipart/form-data" method="POST">
+		<#
+		// Iterate all columns
+		foreach (Column col in table.Columns)
+		{
+				i++;
+				string propertyType = GetNetDataType(col.DataType.Name);
+
+				// If we can't map it, skip it
+				if (string.IsNullOrWhiteSpace(propertyType))
+				{
+					// Skip
+					continue;
+				}
+				if (col.Name == "id")
+				{
+				#>
+					@Html.HiddenFor(model=>model.id)
+				<#
+					continue;
+				}
+				
+				if(new string[] { "changed", "changedby", "created", "createdby"}.Where(x => x == col.Name).FirstOrDefault() != null)
+				{
+					continue;
+				}
+
+
+
+				if (propertyType == "int" || propertyType == "decimal" || propertyType == "double"|| propertyType == "Int16")
+				{
+				#>
+<div class="form-group">
+<label for="<#= col.Name #>" class="col-sm-3 control-label"><#= col.Name #></label>
+<div class="col-sm-9">
+@Html.Kendo().NumericTextBoxFor(model => model.<#= col.Name #>).Value(Model.<#= col.Name #> ?? 0).Spinners(false).Format("n2").HtmlAttributes(new Dictionary<string, object>()
+{
+{"style", "width:100%"},
+{"class", "text-right form-control"},
+}).Culture(System.Globalization.CultureInfo.InstalledUICulture.Name)
+</div>
+</div>	
+				<#
+				}
+				else if(propertyType == "string")
+				{
+				#>
+<div class="form-group">
+<label for="<#= col.Name #>" class="col-sm-3 control-label"><#= col.Name #></label>
+<div class="col-sm-9">
+@Html.TextBoxFor(model => model.<#= col.Name #>, new Dictionary<string, object>()
+{
+{ "class", "form-control" },
+{ "placeholder", "lütfen <#= col.Name #> giriniz" },
+})
+</div>
+</div>			
+				<#
+				}
+				else if(propertyType == "DateTime")
+				{
+				#>
+<div class="form-group">
+<label for="<#= col.Name #>" class="col-sm-3 control-label"><#= col.Name #></label>
+<div class="col-sm-9">
+@(Html.Kendo().DatePickerFor(model => model.<#= col.Name #>).
+HtmlAttributes(new Dictionary<string, object>()
+{
+{"class", "form-control"},
+{"placeholder", "Lütfen <#= col.Name #> Tarihi Giriniz.."},
+})
+.Value(Model.<#= col.Name #>.HasValue ? Model.<#= col.Name #> : DateTime.Now)
+.Format(Extensions.DateFormatShort())
+)
+</div>
+</div>
+				<#
+				}
+				else if(propertyType == "Guid")
+				{
+				#>
+<div class="form-group">
+<label for="<#= col.Name #>" class="col-sm-3 control-label"><#= col.Name #></label>
+<div class="col-sm-9">
+@(
+Html.Kendo().DropDownListFor(model => model.<#= col.Name #>).
+HtmlAttributes(new Dictionary<string, object>()
+{
+{"style", "width:100%"},
+{"class", "form-control"}
+}).
+OptionLabel("<#= col.Name #> Tipi Seçiniz..").
+DataTextField("Name").
+DataValueField("Id").
+Filter(FilterType.Contains).
+DataSource(source =>
+{
+source.Read(read =>
+{
+read.Action("", "General", new { area = string.Empty });
+});
+})
+)
+</div>
+</div>
+				<#
+				}
+				if (i != columnCount){
+				#>
+
+				<#
+            }
+	}
+	#>
+						<br>
+						<div class="row">
+							<div class="col-sm-9">
+								<button class="btn btn-success save" type="submit">Gönder</button>
+							</div>
+						</div>
+					</form>
+
+
+	<#
+        // Write new POCO class to its own file
+        SaveOutput("Insert.cshtml", destinationFolder,table.Name);
+    } 
+#>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<#+
+
+		void SaveOutput(string outputFileName, string destinationFolder,string view)
+		{
+			//
+			destinationFolder=destinationFolder+"/"+view;
+			
+			string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), destinationFolder);
+
+
+			if (!Directory.Exists(templateDirectory)) 
+			{
+				DirectoryInfo di = Directory.CreateDirectory(templateDirectory);
+			}
+
+
+			// Write to destination folder
+			string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+			File.Delete(outputFilePath);
+			File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString(),Encoding.UTF8); 
+ 
+			// Flush generation
+			this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+
+		}
+
+    public static string GetNetDataType(string sqlDataTypeName)
+    {
+        switch (sqlDataTypeName.ToLower())
+        {
+            case "bigint":
+                return "Int64";
+            case "binary":
+            case "image":
+            case "varbinary":
+                return "byte[]";
+            case "bit":
+                return "bool";
+            case "char":
+                return "char";
+            case "datetime":
+            case "smalldatetime":
+                return "DateTime";
+            case "decimal":
+            case "money":
+            case "numeric":
+                return "decimal";
+            case "float":
+                return "double";
+            case "int":
+                return "int";
+            case "nchar":
+            case "nvarchar":
+            case "text":
+            case "varchar":
+            case "xml":
+                return "string";
+            case "real":
+                return "single";
+            case "smallint":
+                return "Int16";
+            case "tinyint":
+                return "byte";
+            case "uniqueidentifier":
+                return "Guid";
+                 
+            default:
+                return null;
+        }
+    }
+ 
+   
+#>

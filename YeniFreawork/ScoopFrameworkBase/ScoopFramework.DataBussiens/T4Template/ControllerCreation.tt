@@ -1,0 +1,156 @@
+﻿<#@ template language="C#" hostspecific="true" debug="True" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="Microsoft.SqlServer.Smo" #>
+<#@ assembly name="Microsoft.SqlServer.ConnectionInfo" #>
+<#@ assembly name="Microsoft.SqlServer.Management.Sdk.Sfc" #>
+<#@ assembly name="Microsoft.Build" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Data.SqlClient" #>
+
+<#@ import namespace="Microsoft.SqlServer.Management.Smo" #>
+<#
+    //**********************************************************************************************
+    // This T4 generates POCOs from the specified DB and saves them to the specified folder which 
+    // is relative to the template's location. One file per table/POCO.
+    //**********************************************************************************************
+ 
+    //****************************
+    // DEFINE YOUR VARIABLES HERE
+    //****************************
+    // The SQL server name or IP
+    string sqlServer = ".";
+    // The SQL username
+    string sqlLogin = "sa";
+    // The SQL password
+    string sqlPassword = "sql_1453";
+    // The SQL database to generate the POCOs for
+    string sqlDatabase = "ScoopFreanwork";
+    // The namespace to apply to the generated classes
+    string classNamespace = "FUT.Web.Controllers";
+    // The destination folder for the generated classes, relative to this file's location.
+    string destinationFolder = "../Web/Controllers";
+    
+  
+
+    // Loop over each table and create a class file!
+    Server server = new Server(sqlServer);
+    server.ConnectionContext.LoginSecure = false;
+    server.ConnectionContext.Login = sqlLogin;
+    server.ConnectionContext.Password = sqlPassword;
+    server.ConnectionContext.Connect();
+ 
+    foreach (Table table in server.Databases[sqlDatabase].Tables)
+    {
+        // Skip sys tables
+        if (table.Name.StartsWith("sys"))
+        {
+            continue;
+        }
+#>
+using System;
+using System.Web.Mvc;
+using ScoopFreanwork.DataBussiens;
+using SccopFramework.Model;
+using ScoopFreanwork.DataBussiens.Entity.InterfaceTable;
+namespace <#= classNamespace #>
+{
+	public class <#= table.Name #>Controller : Controller
+    {
+        // GET: Admin/<#= table.Name #>
+        public ActionResult Index()
+        {
+            return View();
+        }
+        public ActionResult Insert()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Insert(<#= table.Name #> item)
+        {
+            var feedBack = new FeedBack();
+            var db = new ScoopDatabase();
+            var userStatus = (PageSecurity)Session["userStatus"];
+            item.created = DateTime.Now;
+            item.createdby = userStatus.User.id;
+            var rs = db.Insert<#= table.Name #>(item);
+            if (rs.Success)
+            {
+                feedBack.Success("Kayıt işlemi başarılı", true);
+                return RedirectToAction("Index");
+            }
+            feedBack.Warning("Kayıt işlemi başarısız", true);
+            return RedirectToAction("Index");
+        }
+		public ActionResult Update(Guid id)
+        {
+            var db = new ScoopDatabase();
+            var model = db.GET<#= table.Name #>ById(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Update(<#= table.Name #> item)
+        {
+            var feedBack = new FeedBack();
+            var db = new ScoopDatabase();
+            var userStatus = (PageSecurity)Session["userStatus"];
+            item.changed = DateTime.Now;
+            item.changedby = userStatus.User.id;
+			var rs = db.Update<#= table.Name #>(item);
+            if (rs.Success)
+            {
+                feedBack.Success("Güncelleme işlemi başarılı", true);
+                return RedirectToAction("Index");
+            }
+            feedBack.Warning("Güncelleme işlemi başarısız", true);
+            return RedirectToAction("Index");
+        }
+
+		public ActionResult Detail(Guid id)
+        {
+            var db = new ScoopDatabase();
+            var model = db.GET<#= table.Name #>ById(id);
+            return View(model);
+        }
+
+        public ActionResult Delete(<#= table.Name #> item)
+        {
+            var feedBack = new FeedBack();
+            var db = new ScoopDatabase();
+            var rs = db.Delete<#= table.Name #>(item);
+            if (rs.Success)
+            {
+                feedBack.Success("Silme işlemi başarılı", true);
+                return RedirectToAction("Index");
+            }
+            feedBack.Warning("Silme işlemi başarısız", true);
+            return RedirectToAction("Index");
+        }
+    }
+
+}      
+<#
+	// Write new POCO class to its own file
+	SaveOutput(table.Name + "Controller.cs", destinationFolder);
+} 
+#>
+<#+    
+    void SaveOutput(string outputFileName, string destinationFolder)
+    {
+		// Write to destination folder
+        string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), destinationFolder);
+        string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+        File.Delete(outputFilePath);
+        File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString(),Encoding.UTF8); 
+ 
+        // Flush generation
+        this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+
+    }
+#>

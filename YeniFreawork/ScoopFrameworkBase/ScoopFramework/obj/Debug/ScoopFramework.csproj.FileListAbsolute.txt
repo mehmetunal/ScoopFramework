@@ -1,0 +1,8 @@
+C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.dll.config
+C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.dll
+C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.pdb
+C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework\obj\Debug\ScoopFramework.csprojAssemblyReference.cache
+C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework\obj\Debug\ScoopFramework.csproj.CoreCompileInputs.cache
+C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework\obj\Debug\ScoopFramework.csproj.CopyComplete
+C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework\obj\Debug\ScoopFramework.dll
+C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework\obj\Debug\ScoopFramework.pdb

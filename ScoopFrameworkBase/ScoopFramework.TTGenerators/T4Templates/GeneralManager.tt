@@ -1,0 +1,388 @@
+﻿<#@ template language="C#" hostspecific="True" debug="True" #>
+<#@ assembly name="System.Core"#>
+<#@ assembly name="System.Data.Linq"#>
+<#@ assembly name="EnvDTE"#>
+<#@ assembly name="VSLangProj"#>
+<#@ assembly name="System.Xml"#>
+<#@ assembly name="System.Xml.Linq"#>
+<#@ import namespace="System"#>
+<#@ import namespace="System.CodeDom"#>
+<#@ import namespace="System.CodeDom.Compiler"#>
+<#@ import namespace="System.Collections.Generic"#>
+<#@ import namespace="System.Data.Linq"#>
+<#@ import namespace="System.Data.Linq.Mapping"#>
+<#@ import namespace="System.IO"#>
+<#@ import namespace="System.Linq"#>
+<#@ import namespace="System.Reflection"#>
+<#@ import namespace="System.Text"#>
+<#@ import namespace="System.Xml.Linq"#>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating"#>
+<#@ output extension="txt" #>
+<#+
+class Manager
+{
+	public class Block { 
+		public String Project;
+		public String Directory;
+		public String Name; 
+		public int Start, Length; 
+	}
+	private class FolderItem {
+		public String Path;
+		public EnvDTE.ProjectItems Items;
+	}
+	private class CreatedFile {
+		public String FileName;
+		public FolderItem Folder;
+	}
+
+	private Block _currentBlock;
+	private List<Block> _files = new List<Block>();
+	private Block _footer = new Block();
+	private Block _header = new Block();
+	private ITextTemplatingEngineHost _host;
+	private StringBuilder _template;
+	private List<CreatedFile> _generatedFileNames = new List<CreatedFile>();
+	
+
+	private EnvDTE.ProjectItem _templateProjectItem;
+	private EnvDTE.DTE _dte;
+	private Action<String> _checkOutAction;
+	private Action<IEnumerable<CreatedFile>> _projectSyncAction;
+	private bool _dontTouchExistingFile = false;
+
+	public static Manager Create(ITextTemplatingEngineHost host, StringBuilder template, bool dontTouchExistingFile = true){
+		return new Manager(host, template, dontTouchExistingFile);
+	}
+
+	public String DefaultProjectNamespace{
+		get 
+		{
+			return _templateProjectItem.ContainingProject.Properties.Item("DefaultNamespace").Value.ToString();
+		}
+	}
+	public String SolutionName {
+		get {
+			return Path.GetFileNameWithoutExtension(_dte.Solution.FullName);
+		}
+	}
+	public String SolutionDirectory {
+		get {
+			return Path.GetDirectoryName(_dte.Solution.FullName);
+		}
+	}
+	public Block CurrentBlock{
+		get { return _currentBlock; }
+		set {
+			if (CurrentBlock != null)
+				EndBlock();
+			if (value != null)
+				value.Start = _template.Length;
+			_currentBlock = value;
+		}
+	}
+
+	private Manager(ITextTemplatingEngineHost host, StringBuilder template, bool dontTouchExistingFile) {
+
+		_host = host;
+		_template = template;
+		_dontTouchExistingFile = dontTouchExistingFile;
+
+		var hostServiceProvider = (IServiceProvider)host;
+		if (hostServiceProvider == null)
+			throw new ArgumentNullException("Could not obtain IServiceProvider");
+		_dte = (EnvDTE.DTE)hostServiceProvider.GetService(typeof(EnvDTE.DTE));
+		if (_dte == null)
+			throw new ArgumentNullException("Could not obtain DTE from host");
+		_templateProjectItem = _dte.Solution.FindProjectItem(host.TemplateFile);
+		_checkOutAction = (String fileName) => _dte.SourceControl.CheckOutItem(fileName);
+		_projectSyncAction = (IEnumerable<CreatedFile> keepFileNames) => ProjectSync(keepFileNames);
+	
+	}
+
+	public string GetProjectFilePath(string projectPath)
+	{
+		EnvDTE.Solution sol = _dte.Solution;
+		var project = GetProjectByName(sol, projectPath);
+		if(project != null)
+		{
+			return project.FullName;
+		}
+		return null;
+	}
+
+	public void StartNewFile(String project, String directory, String name){
+		if (name == null)
+			throw new ArgumentNullException("name");
+		CurrentBlock = new Block { Name = name, Directory = directory, Project = project };
+	}
+	public void StartFooter(){
+		CurrentBlock = _footer;
+	}
+	public void StartHeader(){
+		CurrentBlock = _header;
+	}
+	public void EndBlock(){
+		if (CurrentBlock == null)
+			return;
+		CurrentBlock.Length = _template.Length - CurrentBlock.Start;
+		if (CurrentBlock != _header && CurrentBlock != _footer)
+			_files.Add(CurrentBlock);
+		_currentBlock = null;
+	}
+	public void Process(bool split){
+		if (_templateProjectItem.ProjectItems == null)
+			return;
+
+		if (split)
+		{
+			EndBlock();
+			String headerText = _template.ToString(_header.Start, _header.Length);
+			String footerText = _template.ToString(_footer.Start, _footer.Length);
+			_files.Reverse();
+			foreach (Block block in _files)
+			{
+				FolderItem outputFolder = GetFolderItem(block.Project, block.Directory, block.Name);
+				var outputFile = Path.Combine(outputFolder.Path, block.Name);
+				String content = headerText + _template.ToString(block.Start, block.Length) + footerText;
+				
+				var createdFile = new CreatedFile();
+				createdFile.FileName = outputFile;
+				createdFile.Folder = outputFolder;
+				_generatedFileNames.Add(createdFile);
+
+				CreateFile(outputFile, content);
+				_template.Remove(block.Start, block.Length);
+			}
+			_template.Remove(_footer.Start, _footer.Length);
+			_template.Remove(_header.Start, _header.Length);
+		}
+		_projectSyncAction.EndInvoke(_projectSyncAction.BeginInvoke(_generatedFileNames, null, null));
+	}
+	public void CreateProject(string projectName, string temp)
+	{
+		EnvDTE.Solution sol = _dte.Solution;
+		var solutionPath = Path.GetDirectoryName(sol.FullName);
+		var projectPath = Path.Combine(solutionPath, projectName);
+		_template.AppendLine(solutionPath);
+		_template.AppendLine(projectPath);
+		if(GetProjectByName(sol, projectName) == null)
+		{
+			Directory.CreateDirectory(projectPath);
+			EnvDTE.Project pro = sol.AddFromTemplate(temp, projectPath, projectName, false);
+			pro.Save();
+		}
+	}
+
+	public void AddProject(string path)
+	{
+		try
+		{
+		
+			EnvDTE.Solution sol = _dte.Solution;
+			CheckoutFileIfRequired(sol.FullName);
+			var projectPath = Path.GetFileNameWithoutExtension(path);
+			if(GetProjectByName(sol, projectPath) == null)
+			{
+				//_template.AppendLine(sol.FullName);
+				//_template.AppendLine(path);
+				sol.AddFromFile(path);
+			}
+		}
+		catch(Exception ex)
+		{
+			_template.AppendLine(ex.Message);
+		}
+
+	}
+
+	public void AddFileToProject(string projectPath, string filePath)
+	{
+		_template.AppendLine("1");
+		EnvDTE.Solution sol = _dte.Solution;
+		_template.AppendLine("2");
+		var projPath = Path.GetFileNameWithoutExtension(projectPath);
+		_template.AppendLine("3");
+		var project = GetProjectByName(sol, projectPath);
+		_template.AppendLine("4");
+		if(project != null)
+		{
+			_template.AppendLine("5");
+			_template.AppendLine(project.FullName);
+			_template.AppendLine(filePath);
+			var projitems = project.ProjectItems;
+			projitems.AddFromFile(filePath);
+		}
+		_template.AppendLine("6");
+	}
+	
+
+	public bool ProjectExists(string path)
+	{
+		EnvDTE.Solution sol = _dte.Solution;
+
+		var projName = Path.GetFileNameWithoutExtension(path);
+		return GetProjectByName(sol, projName) != null;
+	}
+
+	public void AddReferance(string projectName, string referanceName)
+	{
+		EnvDTE.Solution sol = _dte.Solution;
+		
+		var project = GetProjectByName(sol, projectName);
+		VSLangProj.VSProject vsProject = (VSLangProj.VSProject)project.Object;
+		
+		vsProject.References.Add(referanceName);
+		project.Save();
+	}
+
+	public void AddPojectReferance(string projectName, string referanceProjectName)
+	{
+		EnvDTE.Solution sol = _dte.Solution;
+		
+		var refProject = GetProjectByName(sol, referanceProjectName);
+		var project = GetProjectByName(sol, projectName);
+
+		VSLangProj.VSProject vsProject = (VSLangProj.VSProject)project.Object;
+		
+		vsProject.References.AddProject(refProject);
+		project.Save();
+	}
+
+	private FolderItem GetFolderItem(String project, String directory, String fileName){
+
+		EnvDTE.Project proj = GetProjectByName(_dte.Solution, project);
+		if (proj == null)
+		{
+			_template.Append("Hata: Proje bulunamadı");
+			return null;
+		}
+		String projectPath = Path.GetDirectoryName(proj.FileName);
+		var fullName = Path.Combine(projectPath, directory);
+		var result = new FolderItem();
+
+		if(directory == null || directory == "")
+		{
+			result.Path = projectPath;
+			result.Items = proj.ProjectItems;
+			return result;
+		}
+
+		AddFolderByPath(proj, directory);
+		result.Path = fullName;
+		result.Items = GetFolderByPath(proj, fullName).ProjectItems;
+		return result;
+	}
+	private void CreateFile(String outputFile, String content){
+		
+		if(_dontTouchExistingFile && File.Exists(outputFile))
+			return;
+
+		//if (IsFileContentDifferent(outputFile, content))
+		{
+			CheckoutFileIfRequired(outputFile);
+			File.WriteAllText(outputFile, content, Encoding.UTF8);
+		}
+	}
+	private void InsertBOM()
+	{
+
+	}
+	private bool IsFileContentDifferent(String fileName, String newContent){
+		return !(File.Exists(fileName) && File.ReadAllText(fileName) == newContent);
+	}
+	private void ProjectSync(IEnumerable<CreatedFile> keepFileNames){
+		
+		foreach (var createdFile in keepFileNames) {
+			
+			createdFile.Folder.Items.AddFromFile(createdFile.FileName);
+		}
+		
+		//var keepFileNameSet = new HashSet<String>(keepFileNames);
+		//var projectFiles = new Dictionary<String, EnvDTE.ProjectItem>();
+		//var originalFilePrefix = Path.GetFileNameWithoutExtension(templateProjectItem.get_FileNames(0)) + ".";
+		//
+		//foreach (EnvDTE.ProjectItem projectItem in templateProjectItem.ProjectItems)
+		//	projectFiles.Add(projectItem.get_FileNames(0), projectItem);
+		//
+		//// Remove unused items from the project
+		//foreach (var pair in projectFiles)
+		//	if (!keepFileNames.Contains(pair.Key) && !(Path.GetFileNameWithoutExtension(pair.Key) + ".").StartsWith(originalFilePrefix))
+		//		pair.Value.Delete();
+		//
+		//// Add missing files to the project
+		//foreach (String fileName in keepFileNameSet)
+		//	if (!projectFiles.ContainsKey(fileName))
+		//		templateProjectItem.ProjectItems.AddFromFile(fileName);
+	}
+	private void CheckoutFileIfRequired(String fileName){
+		var sc = _dte.SourceControl;
+		if (sc != null && sc.IsItemUnderSCC(fileName) && !sc.IsItemCheckedOut(fileName))
+			_checkOutAction.EndInvoke(_checkOutAction.BeginInvoke(fileName, null, null));
+	}
+	private EnvDTE.Project GetProjectByName(EnvDTE.Solution solution, String name){
+		EnvDTE.Projects projects = solution.Projects;
+		foreach(EnvDTE.Project projectItem in projects)
+		{
+		_template.AppendLine(projectItem.Name);
+			if (projectItem.Name == name)
+				return projectItem;
+		}
+		return null;
+	}
+	private EnvDTE.ProjectItem GetFolderByPath(EnvDTE.Project project, string path){
+		
+		String projectPath = Path.GetDirectoryName(project.FullName);
+		path = path.Replace(projectPath, "");
+		String[] folders = path.Split(new char[]{ '\\' }, StringSplitOptions.RemoveEmptyEntries);
+		
+		EnvDTE.ProjectItems projItems = project.ProjectItems;
+		EnvDTE.ProjectItem projItem = null;
+		for(int i = 0; i < folders.Length; i++){
+			foreach(EnvDTE.ProjectItem projectItem in projItems) {
+				if(projectItem.Name == folders[i])
+				{
+					projItems = projectItem.ProjectItems;
+					if (i == folders.Length - 1) projItem = projectItem;
+					break;
+				}
+			}
+		}
+		return projItem;
+	}
+	private void AddFolderByPath(EnvDTE.Project project, string path){
+		
+		String projectPath = Path.GetDirectoryName(project.FullName);
+		path = path.Replace(projectPath, "");
+		string fullPath = Path.Combine(projectPath, path);
+		var item = GetFolderByPath(project, fullPath);
+		if(item != null)
+			return;
+		
+		Directory.CreateDirectory(fullPath);
+		String[] folders = path.Split(new char[]{ '\\' }, StringSplitOptions.RemoveEmptyEntries);
+		
+		EnvDTE.ProjectItems projItems = project.ProjectItems;
+		EnvDTE.ProjectItem projItem = null;
+		String tempPath = projectPath;
+		for(int i = 0; i < folders.Length; i++){
+			bool folderExists = false;
+			tempPath = Path.Combine(tempPath, folders[i]);
+			foreach(EnvDTE.ProjectItem projectItem in projItems) {
+				if(projectItem.Name == folders[i])
+				{
+					projItems = projectItem.ProjectItems;
+					if (i == folders.Length - 1) projItem = projectItem;
+					folderExists = true;
+					break;
+				}
+			}
+			if (!folderExists) {
+				projItems.AddFromDirectory(tempPath);
+				return;
+			}
+		}
+		return;
+	}
+}
+#>

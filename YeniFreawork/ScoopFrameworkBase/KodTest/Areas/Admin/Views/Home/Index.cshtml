@@ -1,0 +1,36 @@
+﻿@using KodTest.Models
+@using ScoopFramework.Helper
+@using ScoopFramework.Mvc
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+@Html.TextBox("","", new Dictionary<string, object>()
+{
+    {"class", "form-control"},
+    {"required", "required"},
+    {"data-errormesaj","Salon adı boş geçilemez." },
+    {"placeholder", "lütfen salon adını giriniz"}
+}).Validate(Validations.Required)
+
+<div>
+    Area
+    @(Html.Scoop().
+          Grid<VW_TBL_Icerik>().
+          DataSource(
+              builder => builder.
+                  Server().Read("DataSource", "Home", new {area = ""})
+          )
+          )
+</div>
+</body>
+</html>

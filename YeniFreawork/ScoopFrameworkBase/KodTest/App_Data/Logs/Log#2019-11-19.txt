@@ -1,0 +1,8 @@
+ERROR [2019-11-19 15:30:34] Origin [ExecuteNonQuery requires the command to have a transaction when the connection assigned to the command is in a pending local transaction.  The Transaction property of the command has not been initialized.] Message [Execute]
+ERROR [2019-11-19 15:30:40] Origin [This SqlTransaction has completed; it is no longer usable.] Message [Insert Exception]
+ERROR [2019-11-19 15:31:48] Origin [ExecuteNonQuery requires the command to have a transaction when the connection assigned to the command is in a pending local transaction.  The Transaction property of the command has not been initialized.] Message [Execute]
+ERROR [2019-11-19 15:33:43] Origin [ExecuteNonQuery requires the command to have a transaction when the connection assigned to the command is in a pending local transaction.  The Transaction property of the command has not been initialized.] Message [Execute]
+ERROR [2019-11-19 15:34:36] Origin [This SqlTransaction has completed; it is no longer usable.] Message [Insert Exception]
+ERROR [2019-11-19 15:44:47] Origin [This SqlTransaction has completed; it is no longer usable.] Message [Insert Exception]
+ERROR [2019-11-19 15:47:42] Origin [This SqlTransaction has completed; it is no longer usable.] Message [Insert Exception]
+ERROR [2019-11-19 15:49:03] Origin [This SqlTransaction has completed; it is no longer usable.] Message [Insert Exception]

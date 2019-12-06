@@ -1,0 +1,34 @@
+﻿function BitkiHastaliklariDelete() {
+        swal({
+            title: "Seçilen Kayıtı silmek istediğinize eminmisiniz ?",
+            text: "Seçilen Kayıtı silmek istediğinize eminmisiniz ? Silmek istediğiniz kayıtlar kalıcı olarak silinecektir !",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sil",
+            cancelButtonText: "Vazgeç",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                 var url = '@Url.Action("PlantBitkiHastaliklariDelete", "PlantDefinition", new { area = "DecisionSupport" })' + "/" + GridObject.SelectedItem.BK_BitkiHastaliklari;
+                    $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        success: function (result) {
+                            if (result.succes) {
+
+                                swal({ title: 'İşlem Tamamlandı.', text: 'Silme İşlemi Tamamlanmıştır', confirmButtonText: 'Kapat', type: 'success' });
+                                $.each(result.data, function (i, item) { item.created = JsonDate(item.created); });
+
+                                var grid = $('#BK_BitkiHastaliklari').data('kendoGrid');
+                                grid.dataSource.data(result.data);
+                                grid.refresh();
+                            }
+                        }
+                    });
+            } else {
+                swal("İşlem iptal edildi", "Silme işlemi iptal edildi.", "error");
+            }
+        });
+    }

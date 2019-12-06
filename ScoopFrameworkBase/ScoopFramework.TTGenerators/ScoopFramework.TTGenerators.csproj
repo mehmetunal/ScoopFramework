@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{37620E76-6D22-4F1A-A296-6A90DF34533B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ScoopFramework.TTGenerators</RootNamespace>
+    <AssemblyName>ScoopFramework.TTGenerators</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EGIS.Controls, Version=4.5.6.0, Culture=neutral, PublicKeyToken=05b98c869b5ffe6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\EGIS.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="EGIS.ShapeFileLib, Version=4.5.6.0, Culture=neutral, PublicKeyToken=05b98c869b5ffe6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\EGIS.ShapeFileLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CodeGenerators\MVCGenerator.cs" />
+    <Compile Include="CodeGenerators\MVCViewGenerator.cs" />
+    <Compile Include="CodeGenerators\ProjectGenerator.cs" />
+    <Compile Include="CodeGenerators\SecurityClassGenerator.cs" />
+    <Compile Include="CodeGenerators\SQLClassGenerator.cs" />
+    <Compile Include="CodeGenerators\SQLDatabaseFunctions.cs" />
+    <Compile Include="CodeGenerators\SQLServiceGenerator.cs" />
+    <Compile Include="CodeGenerators\SqlTypeConverter.cs" />
+    <Compile Include="Helper\ByteSerializer.cs" />
+    <Compile Include="Helper\Cache.cs" />
+    <Compile Include="Helper\Crypto.cs" />
+    <Compile Include="Helper\CryptographyHelper.cs" />
+    <Compile Include="Helper\EditableObject.cs" />
+    <Compile Include="Helper\EnumerableExtension.cs" />
+    <Compile Include="Helper\EnumsProperties.cs" />
+    <Compile Include="Helper\ExpressionHelper.cs" />
+    <Compile Include="Helper\FileHelper.cs" />
+    <Compile Include="Helper\FileWebJobs.cs" />
+    <Compile Include="Helper\GeometryCalculator.cs" />
+    <Compile Include="Helper\Json.cs" />
+    <Compile Include="Helper\JsonFormatter.cs" />
+    <Compile Include="Helper\JsonHelper.cs" />
+    <Compile Include="Helper\LongTask.cs" />
+    <Compile Include="Helper\MRUCache.cs" />
+    <Compile Include="Helper\ObjectDetails.cs" />
+    <Compile Include="Helper\ObjectXMLSerializer.cs" />
+    <Compile Include="Helper\Parallel.cs" />
+    <Compile Include="Helper\ParallelThread.cs" />
+    <Compile Include="Helper\ProcessingQueue.cs" />
+    <Compile Include="Helper\PropertyAccessGenerator.cs" />
+    <Compile Include="Helper\ProperyChangeProxy.cs" />
+    <Compile Include="Helper\ReflectionHelper.cs" />
+    <Compile Include="Helper\SQLTypeMapper.cs" />
+    <Compile Include="Helper\XmlHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Lib\EGIS.Controls.dll" />
+    <Content Include="Lib\EGIS.ShapeFileLib.dll" />
+    <Content Include="Lib\geomutil_lib.dll" />
+    <Content Include="Lib\geomutil_libx64.dll" />
+    <Content Include="Lib\Microsoft.SqlServer.Types.dll" />
+    <Content Include="Lib\Newtonsoft.Json.dll" />
+    <Content Include="T4Templates\CreateProjects.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CreateProjects1.txt</LastGenOutput>
+    </Content>
+    <Content Include="T4Templates\CreateProjects1.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateProjects.tt</DependentUpon>
+    </Content>
+    <Content Include="T4Templates\GeneralManager.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GeneralManager1.txt</LastGenOutput>
+    </Content>
+    <Content Include="T4Templates\GeneralManager1.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralManager.tt</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

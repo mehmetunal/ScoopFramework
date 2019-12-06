@@ -1,0 +1,12 @@
+﻿<#@ template language="C#" hostspecific="True" debug="True" #>
+<#@ output extension="cs" #>
+<#@ include file="Scoop.SQLClassGenerator.tt" #>
+using System;
+using Microsoft.SqlServer.Types;
+namespace ScoopFramework.DBModel
+{
+	<#
+		var gen = new SQLClassGenerator();   
+		WriteLine(gen.Generate("DBConnection yazınız")); 
+	#>
+}

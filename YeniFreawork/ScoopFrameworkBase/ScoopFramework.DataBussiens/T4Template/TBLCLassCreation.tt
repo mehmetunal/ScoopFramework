@@ -1,0 +1,366 @@
+﻿<#@ template language="C#" hostspecific="true" debug="True" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="Microsoft.VisualStudio.Shell.Interop" #>
+<#@ assembly name="EnvDTE" #>
+<#@ assembly name="EnvDTE80" #>
+<#@ assembly name="VSLangProj" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="Microsoft.SqlServer.Smo" #>
+<#@ assembly name="Microsoft.SqlServer.ConnectionInfo" #>
+<#@ assembly name="Microsoft.SqlServer.Management.Sdk.Sfc" #>
+<#@ assembly name="Microsoft.Build" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="Microsoft.SqlServer.Management.Smo" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="Microsoft.VisualStudio.Shell.Interop" #>
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="EnvDTE80" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
+<#
+    //**********************************************************************************************
+    // This T4 generates POCOs from the specified DB and saves them to the specified folder which 
+    // is relative to the template's location. One file per table/POCO.
+    //**********************************************************************************************
+ 
+    //****************************
+    // DEFINE YOUR VARIABLES HERE
+    //****************************
+    // The SQL server name or IP
+    string sqlServer = ".";
+    // The SQL username
+    string sqlLogin = "sa";
+    // The SQL password
+    string sqlPassword = "77117722!";
+    // The SQL database to generate the POCOs for
+    string sqlDatabase = "ScoopFramework";
+    // The namespace to apply to the generated classes
+    string classNamespace = "ScoopFramework.DataBussiens";
+    // The destination folder for the generated classes, relative to this file's location.
+    string destinationFolder = "../Entity/BaseTable";
+ 
+    // Loop over each table and create a class file!
+    Server server = new Server(sqlServer);
+    server.ConnectionContext.LoginSecure = false;
+    server.ConnectionContext.Login = sqlLogin;
+    server.ConnectionContext.Password = sqlPassword;
+    server.ConnectionContext.Connect();
+ 
+ 
+    foreach (Table table in server.Databases[sqlDatabase].Tables)
+    {
+        // Skip sys tables
+        if (table.Name.StartsWith("sys"))
+        {
+            continue;
+        }
+#>
+using System;
+using ScoopFramework.Entity;
+using System.ComponentModel;
+
+namespace <#= classNamespace #>
+{
+	/// <summary>
+	/// Represents a <#= table.Name #>.
+	/// NOTE: This class is generated from a T4 template - you should not modify it manually.
+	/// </summary>
+	public class <#= table.Name #> :BaseEntity
+	{
+		<# 
+			// Keep count so we don't whitespace the last property/column
+			int columnCount = table.Columns.Count;
+			int i = 0;
+
+			// Iterate all columns
+			foreach (Column col in table.Columns)
+			{
+				i++;
+
+			
+					if(new string[] { "changed", "changedby", "created", "createdby", "id" }.Where(x => x == col.Name).FirstOrDefault() != null)
+					{
+						continue;
+					}
+
+
+				
+				string propertyType = GetNetDataType(col.DataType.Name);
+
+
+				// If we can't map it, skip it
+				if (string.IsNullOrWhiteSpace(propertyType))
+				{
+					// Skip
+					continue;
+				}
+
+				// Handle nullable columns by making the type nullable
+				if (col.Nullable && propertyType != "string")
+				{
+					propertyType += "?";
+				}
+
+
+                if (col.ExtendedProperties["MS_Description"]!=null)
+                {
+					var description=col.ExtendedProperties["MS_Description"].Value;
+		#>[Description("<#= description #>")]
+		public <#= propertyType #> <#= col.Name #> { get; set; }
+		<#
+
+		}
+		else
+		{
+		#>
+public <#= propertyType #> <#= col.Name #> { get; set; }
+		<#
+		}
+
+
+
+			// Do we insert the space?
+			if (i != columnCount)
+			{
+		#>
+
+		<#
+	}
+		#>
+<#
+}
+#>
+}
+}      
+		<#
+        // Write new POCO class to its own file
+        SaveOutput(table.Name + ".cs", destinationFolder,classNamespace);
+    } 
+	#>
+
+
+	<# 
+	
+	  foreach (View table in server.Databases[sqlDatabase].Views)
+    {
+        // Skip sys tables
+        if (!table.Name.StartsWith("VW"))
+        {
+            continue;
+        }
+#>
+using System;
+using ScoopFramework.Entity;
+namespace <#= classNamespace #>
+{
+	/// <summary>
+	/// Represents a <#= table.Name #>.
+	/// NOTE: This class is generated from a T4 template - you should not modify it manually.
+	/// </summary>
+	public class <#= table.Name #> :BaseEntity
+	{
+		<# 
+							// Keep count so we don't whitespace the last property/column
+							int columnCount = table.Columns.Count;
+							int i = 0;
+ 
+							// Iterate all columns
+							foreach (Column col in table.Columns)
+							{
+								i++;
+ 
+ 		
+									if(new string[] { "changed", "changedby", "created", "createdby", "id" }.Where(x => x == col.Name).FirstOrDefault() != null)
+									{
+										continue;
+									}
+			
+			
+	
+			
+	
+
+								string propertyType = GetNetDataType(col.DataType.Name);
+ 
+
+
+
+								// If we can't map it, skip it
+								if (string.IsNullOrWhiteSpace(propertyType))
+								{
+									// Skip
+									continue;
+								}
+ 
+								// Handle nullable columns by making the type nullable
+								if (col.Nullable && propertyType != "string")
+								{
+									propertyType += "?";
+								}
+#>
+public <#= propertyType #> <#= col.Name #> { get; set; }
+<#
+							// Do we insert the space?
+							if (i != columnCount)
+							{
+						#>
+
+		<#
+	}
+						#>
+<#
+}
+#>
+	}
+	}      
+		<#
+        // Write new POCO class to its own file
+        SaveOutput(table.Name + ".cs", destinationFolder,classNamespace);
+    } 
+	
+	 #>
+
+<#+
+    public static string GetNetDataType(string sqlDataTypeName)
+    {
+        switch (sqlDataTypeName.ToLower())
+        {
+            case "bigint":
+                return "Int64";
+            case "binary":
+            case "image":
+            case "varbinary":
+                return "byte[]";
+            case "bit":
+                return "bool";
+            case "char":
+                return "char";
+            case "datetime":
+            case "smalldatetime":
+                return "DateTime";
+            case "decimal":
+            case "money":
+            case "numeric":
+                return "decimal";
+            case "float":
+                return "double";
+            case "int":
+                return "int";
+            case "nchar":
+            case "nvarchar":
+            case "text":
+            case "varchar":
+            case "xml":
+                return "string";
+            case "real":
+                return "single";
+            case "smallint":
+                return "Int16";
+            case "tinyint":
+                return "byte";
+            case "uniqueidentifier":
+                return "Guid";
+                 
+            default:
+                return null;
+        }
+    }
+ 
+    void SaveOutput(string outputFileName, string destinationFolder,string classNamespace)
+    {
+		// Write to destination folder
+        string templateDirectory = Path.Combine(Path.GetDirectoryName(Host.TemplateFile), destinationFolder);
+        string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+        File.Delete(outputFilePath);
+        File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString(),Encoding.UTF8); 
+ 
+        // Flush generation
+        this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+
+
+		var serviceProvider = this.Host as IServiceProvider;
+		var dte = serviceProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+		var solutionDirectory = System.IO.Path.GetDirectoryName(dte.Solution.FullName);
+
+		var project = GetProjectByName(dte, classNamespace);
+
+		//StringBuilder template = GenerationEnvironment;
+		//template.Append(Path.GetFullPath(outputFilePath));
+
+		AddFolderByPath(project, Path.GetFullPath(outputFilePath));
+
+    }
+EnvDTE.Project GetProjectByName(EnvDTE.DTE dte, String name)
+	{
+		EnvDTE.Projects projects = dte.Solution.Projects;
+		foreach(EnvDTE.Project projectItem in projects)
+		{
+			//_template.AppendLine(projectItem.Name);
+			if (projectItem.Name == name)
+				return projectItem;
+		}
+		return null;
+	}
+	EnvDTE.ProjectItem GetFolderByPath(EnvDTE.Project project, string path)
+	{	
+		string projectPath = Path.GetFullPath(Path.GetDirectoryName(project.FullName));
+		
+		//path = Path.GetFullPath(path);
+		
+		path = path.Replace(projectPath, "");
+		string[] folders = path.Split(new char[]{ '\\' }, StringSplitOptions.RemoveEmptyEntries);
+		
+		
+
+		EnvDTE.ProjectItems projItems = project.ProjectItems;
+		EnvDTE.ProjectItem projItem = null;
+		for(int i = 0; i < folders.Length; i++){
+			foreach(EnvDTE.ProjectItem projectItem in projItems) {
+				if(projectItem.Name == folders[i])
+				{
+					projItems = projectItem.ProjectItems;
+					if (i == folders.Length - 1) projItem = projectItem;
+					break;
+				}
+			}
+		}
+		return projItem;
+	}
+	void AddFolderByPath(EnvDTE.Project project, string path)
+	{
+		string projectPath = Path.GetDirectoryName(project.FullName);
+		path = path.Replace(projectPath, "");
+		string fullPath = Path.Combine(projectPath, path);
+		var item = GetFolderByPath(project, fullPath);
+		if(item != null)
+			return;
+		
+		Directory.CreateDirectory(fullPath);
+		String[] folders = path.Split(new char[]{ '\\' }, StringSplitOptions.RemoveEmptyEntries);
+		
+		EnvDTE.ProjectItems projItems = project.ProjectItems;
+		EnvDTE.ProjectItem projItem = null;
+		String tempPath = projectPath;
+		for(int i = 0; i < folders.Length; i++){
+			bool folderExists = false;
+			tempPath = Path.Combine(tempPath, folders[i]);
+			foreach(EnvDTE.ProjectItem projectItem in projItems) {
+				if(projectItem.Name == folders[i])
+				{
+					projItems = projectItem.ProjectItems;
+					if (i == folders.Length - 1) projItem = projectItem;
+					folderExists = true;
+					break;
+				}
+			}
+			if (!folderExists) {
+				projItems.AddFromDirectory(tempPath);
+				return;
+			}
+		}
+		return;
+	}
+#>

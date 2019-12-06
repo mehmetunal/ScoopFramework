@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2173F366-2EB2-4F2A-B735-10FEE407876D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ScoopFramework</RootNamespace>
+    <AssemblyName>ScoopFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="GenericDbContext">
+      <HintPath>..\packages\GenericDbContextAndIDbContext.0.5.0.1\lib\net40\GenericDbContext.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Entity.Design" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Unity.Mvc4">
+      <HintPath>..\packages\Unity.Mvc4.1.2.0.0\lib\net40\Unity.Mvc4.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationIControllerMethode\GlobalasaxController.cs" />
+    <Compile Include="Applications\PagingApplication.cs" />
+    <Compile Include="Attribute\AllowEveryone.cs" />
+    <Compile Include="Attribute\DataAttribute.cs" />
+    <Compile Include="Attribute\EnumsProperties.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="DataConnection\ConnectionType.cs" />
+    <Compile Include="DataLayer\Proses\DataProcessing.cs" />
+    <Compile Include="DataLayer\Proses\Db\DataProcessingDelete.cs" />
+    <Compile Include="DataLayer\Proses\Db\DataProcessingInsert.cs" />
+    <Compile Include="DataLayer\Proses\Db\DataProcessingUpdate.cs" />
+    <Compile Include="DataLayer\Proses\DataTable\DataTableProses.cs" />
+    <Compile Include="DataLayer\Proses\DataTable\DataTableConvert.cs" />
+    <Compile Include="DataLayer\Proses\Entity\EntityValue.cs" />
+    <Compile Include="DataLayer\Library\PrimaryKeyAttribute.cs" />
+    <Compile Include="DataConnection\DBHelper.cs" />
+    <Compile Include="DataLayer\Proses\MethodHelper.cs" />
+    <Compile Include="DataLayer\Proses\Properties\PropertiesTransactions.cs" />
+    <Compile Include="DataLayer\Proses\Operatorler\SqlOperatorler.cs" />
+    <Compile Include="DBModel\Scoop.SQLClassGenerator.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Scoop.SQLClassGenerator.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DBModel\Scoop.DB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Scoop.DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Domain\AppDomainCreated.cs" />
+    <Compile Include="Domain\HttpContextGetIp.cs" />
+    <Compile Include="EMail\EmailOperation.cs" />
+    <Compile Include="Enum\DataEnum.cs" />
+    <Compile Include="Enum\SqlEnum.cs" />
+    <Compile Include="Exceptions\InformationException.cs" />
+    <Compile Include="Extension\ExtensionsMethod.cs" />
+    <Compile Include="FeedbackExcetpion\Feedback.cs" />
+    <Compile Include="Interface\IHideObjectMembers.cs" />
+    <Compile Include="Interface\IJavaScriptInitializer.cs" />
+    <Compile Include="Interface\IJavaScriptSerializer.cs" />
+    <Compile Include="Interface\INavigatable.cs" />
+    <Compile Include="Interface\IUrlGenerator.cs" />
+    <Compile Include="LinqDynamic\ClassFactory.cs" />
+    <Compile Include="LinqDynamic\DynamicClass.cs" />
+    <Compile Include="LinqDynamic\DynamicExpression.cs" />
+    <Compile Include="LinqDynamic\DynamicOrdering.cs" />
+    <Compile Include="LinqDynamic\DynamicProperty.cs" />
+    <Compile Include="LinqDynamic\DynamicQueryable.cs" />
+    <Compile Include="LinqDynamic\ExpressionParser.cs" />
+    <Compile Include="LinqDynamic\ParseException.cs" />
+    <Compile Include="LinqDynamic\Res.cs" />
+    <Compile Include="LinqDynamic\Signature.cs" />
+    <Compile Include="LogControl\Logger.cs" />
+    <Compile Include="LoginMD5\MD5.cs" />
+    <Compile Include="Model\Languages.cs" />
+    <Compile Include="Model\Paging.cs" />
+    <Compile Include="Model\ParamValue.cs" />
+    <Compile Include="Enum\LanguageEnum.cs" />
+    <Compile Include="Model\ResultObje.cs" />
+    <Compile Include="MultiLanguage\MultiLanguage.cs" />
+    <Compile Include="MultiLanguage\MultiResources\MultiEng.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MultiEng.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MultiLanguage\MultiResources\MultiTurkce.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MultiTurkce.resx</DependentUpon>
+    </Compile>
+    <Compile Include="PageCountList\PageCount.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataLayer\OldSource\DataAccessLayer.cs" />
+    <Compile Include="Applications\UrlOptimizasyon.cs" />
+    <Compile Include="Scoop\Grid.cs" />
+    <Compile Include="Scoop\GridColunm\Bount.cs" />
+    <Compile Include="Scoop\GridColunm\Colunms.cs" />
+    <Compile Include="Scoop\GridColunm\GridBuilder.cs" />
+    <Compile Include="Scoop\ScoopControl.cs" />
+    <Compile Include="SessionContainer\BaseSessionGeneric.cs" />
+    <Compile Include="SessionContainer\Model\SessionModel.cs" />
+    <Compile Include="Test\GenericFiltreleme\Entity\Filtre.cs" />
+    <Compile Include="UrlController\GuidIdControl.cs" />
+    <Compile Include="UrlController\SeoFriendlyRoute.cs" />
+    <Compile Include="UrlController\UrlSeoController.cs" />
+    <Compile Include="UserLogin\PageSecurity.cs" />
+    <Compile Include="UserLogin\SecurityControl.cs" />
+    <Compile Include="UserRole\StaticTempMethod.cs" />
+    <Compile Include="UserRole\UserRolGuidControlAuthorize.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DBModel\Scoop.SQLClassGenerator.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Scoop.SQLClassGenerator.cs</LastGenOutput>
+    </None>
+    <None Include="DBModel\Scoop.DB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Scoop.DB.cs</LastGenOutput>
+    </None>
+    <None Include="FeedbackExcetpion\Js\toaster\js\toastr.js.map" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FeedbackExcetpion\Js\Master.js" />
+    <Content Include="FeedbackExcetpion\Js\toaster\css\toastr.css" />
+    <Content Include="FeedbackExcetpion\Js\toaster\css\toastr.min.css" />
+    <Content Include="FeedbackExcetpion\Js\toaster\js\toastr.min.js" />
+    <Content Include="jquery-lib\sweetAlert\css\sweetalert.css" />
+    <Content Include="jquery-lib\sweetAlert\js\sweetalert-dev.js" />
+    <Content Include="jquery-lib\sweetAlert\js\sweetalert.min.js" />
+    <Content Include="jquery-lib\sweetAlert\Ornek.txt" />
+    <Content Include="Kullanımı.txt" />
+    <Content Include="Unity.Mvc4.README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MultiLanguage\MultiResources\MultiEng.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MultiEng.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MultiLanguage\MultiResources\MultiTurkce.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MultiTurkce.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
