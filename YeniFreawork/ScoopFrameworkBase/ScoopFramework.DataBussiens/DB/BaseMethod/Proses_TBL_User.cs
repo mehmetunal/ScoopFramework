@@ -24,7 +24,7 @@ namespace ScoopFramework.DataBussiens
         {
             using (var db = GetDB<TBL_User>(tran))
             {
-                return db.Table().OrderBy(x => x.created).DataTablesFiltre(requestModel).RunToList();
+                return db.Table().DataTablesFiltre(requestModel).RunToList();
             }
         }
 

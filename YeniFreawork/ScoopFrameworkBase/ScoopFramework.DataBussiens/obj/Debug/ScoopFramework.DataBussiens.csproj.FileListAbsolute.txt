@@ -32,3 +32,10 @@ C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework
 C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.DataBussiens\obj\Debug\ScoopFramework.DataBussiens.csproj.CopyComplete
 C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.DataBussiens\obj\Debug\ScoopFramework.DataBussiens.dll
 C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.DataBussiens\obj\Debug\ScoopFramework.DataBussiens.pdb
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.DataBussiens.dll.config
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.DataBussiens.dll
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.DataBussiens.pdb
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.DataBussiens\obj\Debug\ScoopFramework.DataBussiens.csprojAssemblyReference.cache
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.DataBussiens\obj\Debug\ScoopFramework.DataBussiens.csproj.CopyComplete
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.DataBussiens\obj\Debug\ScoopFramework.DataBussiens.dll
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.DataBussiens\obj\Debug\ScoopFramework.DataBussiens.pdb

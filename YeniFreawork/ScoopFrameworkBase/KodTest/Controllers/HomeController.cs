@@ -337,17 +337,54 @@ namespace KodTest.Controllers
 
 
             var db = new ScoopManagement();
-            var trans = db.BeginTransaction();
 
-            var user = new TBL_User { id = Guid.NewGuid(), Name = "Mehmet" };
+            List<TBL_User> list = new List<TBL_User>();
 
-            var rs = db.InsertTBL_User(user, trans);
-            if (rs.Success)
-            {
-                var userEmail = new TBL_UserEmail { id = Guid.NewGuid(), UserId = user.id, Email = "a@gmail.com" };
-                var rs2 = db.InsertTBL_UserEmail(userEmail, trans);
-                trans.Commit();
-            }
+            #region BULK_INSERT
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali1", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali2", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali3", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali4", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali5", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali6", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali7", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali8", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali9", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali10", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali11", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali12", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali13", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali14", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali15", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali16", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali17", created = DateTime.Now, createdby = Guid.NewGuid() });
+            list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali18", created = DateTime.Now, createdby = Guid.NewGuid() });
+
+            //var bulkInsert = db.BulkInsertTBL_User(list);
+
+            #endregion
+
+
+            #region BULK_UPDATE
+            var data = db.GETTBL_User();
+
+            data.ForEach(item => { item.Name = "mm"; });
+
+            var dataaaaa = db.BulkUpdateTBL_User(data);
+            #endregion
+
+            //var trans = db.BeginTransaction();
+
+            //var user = new TBL_User { id = Guid.NewGuid(), Name = "Mehmet" };
+
+            //var rs = db.InsertTBL_User(user, trans);
+            //if (rs.Success)
+            //{
+            //    var userEmail = new TBL_UserEmail { id = Guid.NewGuid(), UserId = user.id, Email = "a@gmail.com" };
+            //    var rs2 = db.InsertTBL_UserEmail(userEmail, trans);
+            //    trans.Commit();
+            //}
 
             return View();
         }

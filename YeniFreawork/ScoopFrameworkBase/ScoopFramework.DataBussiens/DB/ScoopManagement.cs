@@ -8,8 +8,8 @@ namespace ScoopFramework.DataBussiens
     public partial class ScoopManagement
     {
 
-        public string ConnectionString { get; private set; }
-        public string DbName { get; private set; }
+        protected string ConnectionString { get; private set; }
+        protected string DbName { get; private set; }
         public ScoopManagement()
         {
             this.ConnectionString = WebConfigurationManager.AppSettings["DBConnection"];

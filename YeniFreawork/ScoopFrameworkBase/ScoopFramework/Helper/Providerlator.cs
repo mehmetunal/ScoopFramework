@@ -90,7 +90,7 @@ namespace ScoopFramework.Helper
 
             try
             {
-                using (var copy = new SqlBulkCopy(_connection))
+                using (var copy = new SqlBulkCopy(_connection, SqlBulkCopyOptions.KeepIdentity, _transaction))
                 {
                     foreach (var item in dataTable.Columns)
                     {
@@ -146,7 +146,7 @@ namespace ScoopFramework.Helper
                 }
                 return Execute(script, null);
             }
-            catch
+            catch(System.Exception ex)
             {
                 return 0;
             }
