@@ -16,13 +16,12 @@ namespace ScoopFramework.Helper
         private Server server = null;
         public Scripter scripter = null;
         private SqlConnection sqlConnection = null;
-        private string connectionString = String.Empty;
         private ServerConnection serverConnection = null;
 
-        public DBScripter(string ConnectionString)
+        public DBScripter(SqlConnection sqlConnection = null, string connectionString = "")
         {
-            this.connectionString = ConnectionString;
-            this.sqlConnection = new SqlConnection(ConnectionString);
+            this.sqlConnection = sqlConnection ?? new SqlConnection(connectionString);
+
             this.serverConnection = new ServerConnection(this.sqlConnection);
             this.server = new Server(this.serverConnection);
             this.scripter = new Scripter(this.server)
@@ -129,8 +128,8 @@ namespace ScoopFramework.Helper
                 {
                     var _file = new FileInfo(file);
 
-                    SqlConnection conn = new SqlConnection(this.connectionString);
-                    Server server = new Server(new ServerConnection(conn));
+
+                    Server server = new Server(new ServerConnection(sqlConnection));
 
                     using (var sr = new StreamReader(file))
                     {

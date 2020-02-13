@@ -241,7 +241,7 @@ namespace ScoopFramework.Files
         public static ReturnValue GetDBScript(string tables = null)
         {
             var Tables = tables == null ? null : tables.Split(',');
-            var dbs = new DBScripter(WebConfigurationManager.AppSettings["DBConnection"]);
+            var dbs = new DBScripter(null, WebConfigurationManager.AppSettings["DBConnection"]);
             return dbs.GenerateTableScript(Tables);
         }
         /// <summary>

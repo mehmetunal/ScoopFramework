@@ -337,7 +337,7 @@ namespace KodTest.Controllers
 
 
             var db = new ScoopManagement();
-
+            var trans = db.BeginTransaction();
             List<TBL_User> list = new List<TBL_User>();
 
             #region BULK_INSERT
@@ -360,18 +360,20 @@ namespace KodTest.Controllers
             list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali16", created = DateTime.Now, createdby = Guid.NewGuid() });
             list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali17", created = DateTime.Now, createdby = Guid.NewGuid() });
             list.Add(new TBL_User() { id = Guid.NewGuid(), Name = "ali18", created = DateTime.Now, createdby = Guid.NewGuid() });
-
-            //var bulkInsert = db.BulkInsertTBL_User(list);
-
+            var bulkInsert = db.BulkInsertTBL_User(list, trans);
             #endregion
 
 
             #region BULK_UPDATE
             var data = db.GETTBL_User();
-
             data.ForEach(item => { item.Name = "mm"; });
+            var dataaaaa = db.BulkUpdateTBL_User(data, trans);
+            #endregion
 
-            var dataaaaa = db.BulkUpdateTBL_User(data);
+            #region BUlk Delete
+            var deleteUsers = db.GETTBL_User();
+            var deleteUser = db.BulkDeleteTBL_User(deleteUsers, trans);
+            trans.Commit();
             #endregion
 
             //var trans = db.BeginTransaction();

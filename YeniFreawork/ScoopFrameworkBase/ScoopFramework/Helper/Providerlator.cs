@@ -138,7 +138,7 @@ namespace ScoopFramework.Helper
         {
             try
             {
-                var dbs = new DBScripter(this.ConnectionString);
+                var dbs = new DBScripter(_connection);
                 var script = dbs.GetTableScript(table);
                 if (!string.IsNullOrEmpty(script))
                 {
