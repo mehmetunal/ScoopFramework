@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ScoopFramework.Exception;
+using ScoopFramework.Expressions;
+using ScoopFramework.Interface;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
@@ -7,10 +10,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using MySql.Data.MySqlClient;
-using ScoopFramework.Exception;
-using ScoopFramework.Expressions;
-using ScoopFramework.Interface;
 
 namespace ScoopFramework.Helper
 {
@@ -19,12 +18,10 @@ namespace ScoopFramework.Helper
         public ParamStringBuilder()
         {
             _parameters = new List<SqlParameter>();
-            _MysqlParameters = new List<MySqlParameter>();
             sb = new StringBuilder();
         }
         public StringBuilder sb { get; set; }
         public List<SqlParameter> _parameters { get; set; }
-        public List<MySqlParameter> _MysqlParameters { get; set; }
     }
     internal static class NewHelpers
     {
@@ -190,20 +187,6 @@ namespace ScoopFramework.Helper
 
             return sb;
         }
-        internal static StringBuilder GetDynamicMySqlWhere<T>(this Expression expression, List<MySqlParameter> _parameter = null)
-        {
-            _parameter = _parameter ?? new List<MySqlParameter>();
-            var sb = new StringBuilder();
-            expression.StripQuotes();
-            var lambdaExpression = (LambdaExpression)expression;
-
-            var unaryExpression = lambdaExpression.Body as UnaryExpression;
-
-            var iqueryItem = WriteExpression(unaryExpression.Operand);
-            _parameters.Add(iqueryItem);
-            MySqlConvert(iqueryItem, sb, _parameter);
-            return sb;
-        }
 
         internal static StringBuilder GetValueWhere<T>(this Expression expression, List<SqlParameter> _parameter = null)
         {
@@ -235,38 +218,6 @@ namespace ScoopFramework.Helper
             return sb;
         }
 
-        internal static StringBuilder GetValueMySqlWhere<T>(this Expression expression, List<MySqlParameter> _parameter = null)
-        {
-            if (_parameters == null)
-            {
-                _parameter = new List<MySqlParameter>();
-            }
-
-            var lambdaExp = (LambdaExpression)expression;
-            var exp = Expression.Lambda<Func<T, object>>(lambdaExp.Body, lambdaExp.Parameters.FirstOrDefault());
-
-            var sb = new StringBuilder();
-            var unaryExpression = exp.Body as UnaryExpression;
-
-            if (unaryExpression != null)
-            {
-                var iqueryItem = WriteExpression(unaryExpression.Operand);
-                _parameters.Add(iqueryItem);
-                MySqlConvert(iqueryItem, sb, _parameter);
-            }
-            else
-            {
-                var _ex = StripQuotes(exp.Body);
-                var param = exp.Parameters[0];
-                Expression conversion = Expression.Convert(_ex, typeof(object));
-                var lambda = Expression.Lambda<Func<T, object>>(conversion, new[] { param });
-                var iqueryItem = WriteExpression(lambda.Body);
-                _parameters.Add(iqueryItem);
-                MySqlConvert(iqueryItem, sb, _parameter);
-
-            }
-            return sb;
-        }
 
         internal static ParamStringBuilder GetFiltreWhere(this object entity, List<SqlParameter> _parameters = null)
         {
@@ -287,34 +238,6 @@ namespace ScoopFramework.Helper
 
             return new ParamStringBuilder() { sb = sb, _parameters = _parameters };
         }
-
-        internal static ParamStringBuilder GetFiltreMySqlWhere(this object entity, List<MySqlParameter> _parameters = null)
-        {
-            var obj = new List<string>();
-            _parameters = _parameters ?? new List<MySqlParameter>();
-
-            var propertyes = entity.GetType().GetProperties().Where(x => x.GetValue(entity, null) != null).ToArray();
-            foreach (var propertyInfo in propertyes)
-            {
-                var value = propertyInfo.GetValue(entity, null);
-                _parameters.Add(new MySqlParameter() { ParameterName = propertyInfo.Name, Value = value });
-                obj.Add("[" + propertyInfo.Name + "]=@" + propertyInfo.Name);
-            }
-
-
-            var sb = new StringBuilder().Append(string.Join(" and ", obj));
-            //SqlConvert(iqueryItem, sb, _parameters);
-
-            return new ParamStringBuilder() { sb = sb, _MysqlParameters = _parameters };
-        }
-
-        private static void MySqlConvert(IQueryItem iqueryItem, StringBuilder sb, List<MySqlParameter> _parameter)
-        {
-            var mssqlQueryBuilder = new MysqlQueryBuilder(typeMapper);
-            sb.Append(mssqlQueryBuilder.ProcessBEXP(iqueryItem as BEXP));
-            _parameter.AddRange(mssqlQueryBuilder._parameters.Select(queryParameter => new MySqlParameter(queryParameter.Name, queryParameter.Value)));
-        }
-
 
         private static void SqlConvert(IQueryItem iqueryItem, StringBuilder sb, List<SqlParameter> _parameter)
         {

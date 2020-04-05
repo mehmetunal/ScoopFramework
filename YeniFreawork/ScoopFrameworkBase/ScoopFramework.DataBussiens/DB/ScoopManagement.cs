@@ -1,5 +1,4 @@
 ﻿using ScoopFramework.Helper;
-using ScoopFramework.MySql;
 using System.Data.Common;
 using System.Web.Configuration;
 
@@ -81,17 +80,6 @@ namespace ScoopFramework.DataBussiens
         //        throw new System.Exception(string.Format("connection :{0}", ex.Message));
         //    }
         //}
-        public MySqlProviderlator MySqlProviderConnection()
-        {
-            try
-            {
-                return new MySqlProviderlator(ScoopConnectionType.ConnectionString);
-            }
-            catch (System.Exception ex)
-            {
-                throw new System.Exception(string.Format("connection :{0}", ex.Message));
-            }
-        }
     }
 
 }
