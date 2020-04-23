@@ -22,7 +22,7 @@ C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\MinifierLibrar
 C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\MinifierLibrary\obj\Debug\ScoopFramework.MinifierLibrary.pdb
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.MinifierLibrary.dll
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.MinifierLibrary.pdb
-D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\MinifierLibrary\obj\Debug\ScoopFramework.MinifierLibrary.csprojAssemblyReference.cache
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\MinifierLibrary\obj\Debug\ScoopFramework.MinifierLibrary.csproj.CoreCompileInputs.cache
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\MinifierLibrary\obj\Debug\ScoopFramework.MinifierLibrary.csproj.CopyComplete
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\MinifierLibrary\obj\Debug\ScoopFramework.MinifierLibrary.dll
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\MinifierLibrary\obj\Debug\ScoopFramework.MinifierLibrary.pdb

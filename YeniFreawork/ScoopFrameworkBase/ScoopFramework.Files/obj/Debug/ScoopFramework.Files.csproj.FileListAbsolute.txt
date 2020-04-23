@@ -65,6 +65,10 @@ D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Files\bin\Debug\Microsoft.SqlServer.Dmf.Common.xml
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Files\bin\Debug\Microsoft.SqlServer.ServiceBrokerEnum.xml
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Files\obj\Debug\ScoopFramework.Files.csprojAssemblyReference.cache
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Files\obj\Debug\ScoopFramework.Files.csproj.CoreCompileInputs.cache
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Files\obj\Debug\ScoopFramework.Files.csproj.CopyComplete
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Files\obj\Debug\ScoopFramework.Files.dll
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Files\obj\Debug\ScoopFramework.Files.pdb
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.Files.dll.config
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.Files.dll
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.Files.pdb

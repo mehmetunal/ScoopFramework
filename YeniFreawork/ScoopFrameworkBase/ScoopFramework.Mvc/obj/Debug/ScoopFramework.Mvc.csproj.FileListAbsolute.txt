@@ -22,6 +22,8 @@ C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework
 C:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Mvc\obj\Debug\ScoopFramework.Mvc.csprojAssemblyReference.cache
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.Mvc.dll
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\Output\bin\Debug\ScoopFramework.Mvc.pdb
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Mvc\obj\Debug\ScoopFramework.Mvc.csprojAssemblyReference.cache
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Mvc\obj\Debug\ScoopFramework.Mvc.csproj.CoreCompileInputs.cache
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Mvc\obj\Debug\ScoopFramework.Mvc.csproj.CopyComplete
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Mvc\obj\Debug\ScoopFramework.Mvc.dll
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\ScoopFramework.Mvc\obj\Debug\ScoopFramework.Mvc.pdb

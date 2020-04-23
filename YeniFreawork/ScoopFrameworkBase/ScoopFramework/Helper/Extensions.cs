@@ -856,6 +856,18 @@ namespace ScoopFramework.Helper
             drop.AddRange(item);
             return drop;
         }
+        public static List<SelectListItem> ToSelectAll(this List<SelectListItem> item, string placeholder = "Select All")
+        {
+            List<SelectListItem> drop = new List<SelectListItem> { new SelectListItem() { Text = placeholder, Value = Guid.Empty.ToString() } };
+            drop.AddRange(item);
+            return drop;
+        }
+        public static List<SelectListItem> ToSelectAll(this SelectListItem[] item, string placeholder = "Select All")
+        {
+            List<SelectListItem> drop = new List<SelectListItem> { new SelectListItem() { Text = placeholder, Value = Guid.Empty.ToString() } };
+            drop.AddRange(item);
+            return drop;
+        }
 
 
         public static List<T> ToConvertDateTableForList<T>(this DataTable dataTable)

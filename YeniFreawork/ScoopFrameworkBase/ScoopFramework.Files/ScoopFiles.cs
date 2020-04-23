@@ -252,7 +252,7 @@ namespace ScoopFramework.Files
         /// <param name="size">new Size(100, 100)</param>
         /// <param name="categoriFile"></param>
         /// <returns></returns>
-        public static List<string> ImagesFilesCreate(IEnumerable<HttpPostedFileBase> files, string filePath, Size? size, string title = "", string categoriFile = null, bool watermark = false, string watermarkText = "ScoopFramework")
+        public static List<string> ImagesFilesCreate(IEnumerable<HttpPostedFileBase> files, string filePath, Size? size, string title = "", string categoriFile = null, bool watermark = false, string watermarkText = "ScoopFramework", bool safResimAdi = false)
         {
             List<string> liste = new List<string>();
 
@@ -279,7 +279,7 @@ namespace ScoopFramework.Files
                     extension = extension.ToLower();
                     if (fileName == null) continue;
 
-                    var tarih = DateTime.Now.ToString("yyyy-MM-dd-HH", new CultureInfo("tr")).Replace(" ", "").Replace(",", "").Replace(":", "").Replace(".", "").Replace("/", "");
+                    var tarih = !safResimAdi ? DateTime.Now.ToString("yyyy-MM-dd-HH", new CultureInfo("tr")).Replace(" ", "").Replace(",", "").Replace(":", "").Replace(".", "").Replace("/", "") : "";
 
                     if (!string.IsNullOrEmpty(title))
                     {
@@ -289,7 +289,6 @@ namespace ScoopFramework.Files
                     {
                         fileName = tarih + "_" + fileName.Replace(extension, "").ToSeoUrl().Replace(" ", "").Replace("--", "-").Replace("__", "-").ToLower();
                     }
-                    liste.Add($"{fileName}{extension}");
                     using (var img = Image.FromStream(file.InputStream))
                     {
                         if (size == null)
@@ -297,6 +296,7 @@ namespace ScoopFramework.Files
                         else
                             fileName = $"{size.Value.Width}X{size.Value.Height}_{fileName}";
 
+                        liste.Add($"{fileName}{extension}");
 
                         SaveToFolder(img, size.Value, $"{filePath}/{fileName}{extension}", watermark, watermarkText);
                     }

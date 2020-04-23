@@ -183,6 +183,7 @@ D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\KodTest\bin\Mi
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\KodTest\bin\Microsoft.SqlServer.Dmf.Common.xml
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\KodTest\bin\Microsoft.SqlServer.ServiceBrokerEnum.xml
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\KodTest\obj\Debug\KodTest.csprojAssemblyReference.cache
+D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\KodTest\obj\Debug\KodTest.csproj.CoreCompileInputs.cache
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\KodTest\obj\Debug\KodTest.csproj.CopyComplete
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\KodTest\obj\Debug\KodTest.dll
 D:\Personal\Projes\ScoopFramework\YeniFreawork\ScoopFrameworkBase\KodTest\obj\Debug\KodTest.pdb
